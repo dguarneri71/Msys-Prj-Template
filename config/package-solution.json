@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "msys-prj-template-client-side-solution",
+    "id": "0ca594b5-5cdd-48e8-842e-ab12d7a7acc3",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.19.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "msys-prj-template description"
+      },
+      "longDescription": {
+        "default": "msys-prj-template description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "msys-prj-template Feature",
+        "description": "The feature that activates elements of the msys-prj-template solution.",
+        "id": "8c3e0434-17f8-4913-aecb-1402021cf59b",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/msys-prj-template.sppkg"
+  }
+}

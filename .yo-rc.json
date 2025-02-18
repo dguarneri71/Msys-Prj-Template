@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "18.20.4",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.12.0"
+    },
+    "version": "1.19.0",
+    "libraryName": "msys-prj-template",
+    "libraryId": "0ca594b5-5cdd-48e8-842e-ab12d7a7acc3",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "msys-prj-template",
+    "solutionShortDescription": "msys-prj-template description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
