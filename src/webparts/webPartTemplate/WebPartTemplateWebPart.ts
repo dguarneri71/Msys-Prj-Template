@@ -11,6 +11,8 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'WebPartTemplateWebPartStrings';
 import WebPartTemplate from './components/WebPartTemplate';
 import { IWebPartTemplateProps } from './components/IWebPartTemplateProps';
+import { IDataService } from '../../classes/services/IDataService';
+import SPDataService from '../../classes/services/SPDataService';
 
 export interface IWebPartTemplateWebPartProps {
   description: string;
@@ -20,6 +22,8 @@ export default class WebPartTemplateWebPart extends BaseClientSideWebPart<IWebPa
 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
+  private _dataService: IDataService;
+  //private _dataServicePartial: SPDataServicePartial; //DG Test utilizzo classe parziale
 
   public render(): void {
     const element: React.ReactElement<IWebPartTemplateProps> = React.createElement(
@@ -29,7 +33,8 @@ export default class WebPartTemplateWebPart extends BaseClientSideWebPart<IWebPa
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        dataService: this._dataService //DG aggiunta
       }
     );
 
@@ -37,12 +42,13 @@ export default class WebPartTemplateWebPart extends BaseClientSideWebPart<IWebPa
   }
 
   protected onInit(): Promise<void> {
+    this._dataService = new SPDataService(this.context.serviceScope);
+
+    console.log("dataService: ", this._dataService);
     return this._getEnvironmentMessage().then(message => {
       this._environmentMessage = message;
     });
   }
-
-
 
   private _getEnvironmentMessage(): Promise<string> {
     if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
