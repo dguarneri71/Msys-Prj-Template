@@ -23,7 +23,7 @@
     "officeFabricIconFontName": "Page",
     "properties": {
       "description": "WebPartTemplate",
-      "listName": "Task"
+      "listName": "Tasks"
     }
   }]
 }
