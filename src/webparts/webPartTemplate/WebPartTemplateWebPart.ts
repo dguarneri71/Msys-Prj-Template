@@ -13,9 +13,12 @@ import WebPartTemplate from './components/WebPartTemplate';
 import { IWebPartTemplateProps } from './components/IWebPartTemplateProps';
 import { IDataService } from '../../classes/services/IDataService';
 import SPDataService from '../../classes/services/SPDataService';
+import { PropertyPaneWebPartInformation } from '@pnp/spfx-property-controls/lib/PropertyPaneWebPartInformation';
 
 export interface IWebPartTemplateWebPartProps {
   description: string;
+  toggleInfoHeaderValue: boolean;
+  listName: string
 }
 
 export default class WebPartTemplateWebPart extends BaseClientSideWebPart<IWebPartTemplateWebPartProps> {
@@ -34,7 +37,8 @@ export default class WebPartTemplateWebPart extends BaseClientSideWebPart<IWebPa
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
-        dataService: this._dataService //DG aggiunta
+        dataService: this._dataService, //DG 
+        listName: this.properties.listName //DG
       }
     );
 
@@ -116,6 +120,26 @@ export default class WebPartTemplateWebPart extends BaseClientSideWebPart<IWebPa
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                }),
+                PropertyPaneTextField('listName', {
+                  label: "List"
+                })
+              ]
+            }
+          ]
+        },
+        {
+          header: {
+            description: "Information"
+          },
+          groups: [
+            {
+              groupName: "",
+              groupFields: [
+                PropertyPaneWebPartInformation({
+                  description: 'Solution <strong>msys-prj-template</strong>, by <a href="https://msys.it/" target="_blank">Microsys</a>',
+                  //moreInfoLink: 'https://pnp.github.io/sp-dev-fx-property-controls/',
+                  key: 'webPartInfoId'
                 })
               ]
             }

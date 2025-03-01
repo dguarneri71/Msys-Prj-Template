@@ -18,11 +18,12 @@
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
     "group": { "default": "Advanced" },
-    "title": { "default": "WebPartTemplate" },
+    "title": { "default": "Msys - WebPartTemplate" },
     "description": { "default": "WebPartTemplate description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "WebPartTemplate"
+      "description": "WebPartTemplate",
+      "listName": "Task"
     }
   }]
 }

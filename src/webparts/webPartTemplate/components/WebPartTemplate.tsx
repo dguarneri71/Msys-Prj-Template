@@ -2,12 +2,19 @@ import * as React from 'react';
 import styles from './WebPartTemplate.module.scss';
 import type { IWebPartTemplateProps } from './IWebPartTemplateProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+import { IItem } from '@pnp/sp/items';
 
 export default class WebPartTemplate extends React.Component<IWebPartTemplateProps, {}> {
+
+  private items: IItem[] = [];
+  
   //Spostare codice su un bottone
   public async componentDidMount(): Promise<void> {
     const lists = await this.props.dataService.lists.getLists();
     console.log("Lists:", lists);
+
+    this.items = await this.props.dataService.items.getItems(this.props.listName);
+    console.log("Items count:", this.items.length);
   }
 
   public render(): React.ReactElement<IWebPartTemplateProps> {

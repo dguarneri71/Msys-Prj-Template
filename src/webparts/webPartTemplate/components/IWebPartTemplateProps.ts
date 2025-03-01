@@ -7,4 +7,5 @@ export interface IWebPartTemplateProps {
   hasTeamsContext: boolean;
   userDisplayName: string;
   dataService: IDataService; //DG aggiunta
+  listName: string //DG
 }

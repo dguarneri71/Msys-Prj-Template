@@ -23,6 +23,10 @@ Node 18.20.4
 > Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
 
 ## Prerequisites
+Install:
+1. [PnP/PnPjs](https://pnp.github.io/pnpjs/) v. - npm install @pnp/sp @pnp/graph --save
+2. [@pnp/spfx-property-controls](https://pnp.github.io/sp-dev-fx-property-controls/) v.3 - npm install @pnp/spfx-property-controls --save --save-exact
+3. [@pnp/spfx-controls-react](https://pnp.github.io/sp-dev-fx-controls-react/) v.3 - npm install @pnp/spfx-controls-react --save --save-exact
 
 ## Solution
 
