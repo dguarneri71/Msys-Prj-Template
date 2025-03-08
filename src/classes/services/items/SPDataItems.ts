@@ -27,6 +27,20 @@ export class SPDataItems extends SPDataBase {
 
         return items;
     }
+      
+
+    /*public async getItems4LargeList(listName: string): Promise<IItem[]> {
+        let result: IItem[] = [];
+
+        //TODO: come si fa?
+        for await (const items of this._sp.web.lists.getByTitle(listName).items.top(1000)()) {
+            console.log(items); //array of 10 items
+            result = result.concat(items);
+            break; // closes the iterator, returns -- stops retrieving pages
+        }
+
+        return result;
+    }*/
 
     //Metodo per recuperare un singolo item
     public async getItem(listName: string, itemId: number): Promise<IItem> {
@@ -47,12 +61,12 @@ export class SPDataItems extends SPDataBase {
     public async deleteItem(listName: string, itemId: number): Promise<void> {
         console.log(LOG_SOURCE + " - deleteItem() - from list '" + listName + "' - ID: '" + itemId + "' ");
         //let item = await this.getItem(listName, itemId); 
-        try{
+        try {
             await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
             console.log(LOG_SOURCE + " - deleteItem() - item deleted.");
         }
-        catch {
-            console.log(LOG_SOURCE + " - deleteItem() - item deleted with error.");
+        catch (e) {
+            console.log(LOG_SOURCE + " - deleteItem() - item deleted with error.", e);
         }
     }
 }
