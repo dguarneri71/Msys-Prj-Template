@@ -9,12 +9,30 @@
           "manifest": "./src/webparts/webPartTemplate/WebPartTemplateWebPart.manifest.json"
         }
       ]
+    },
+    "cs-template-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/csTemplate/CsTemplateCommandSet.js",
+          "manifest": "./src/extensions/csTemplate/CsTemplateCommandSet.manifest.json"
+        }
+      ]
+    },
+    "field-template-field-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/fieldTemplate/FieldTemplateFieldCustomizer.js",
+          "manifest": "./src/extensions/fieldTemplate/FieldTemplateFieldCustomizer.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "WebPartTemplateWebPartStrings": "lib/webparts/webPartTemplate/loc/{locale}.js",
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
-    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
+    "CsTemplateCommandSetStrings": "lib/extensions/csTemplate/loc/{locale}.js",
+    "FieldTemplateFieldCustomizerStrings": "lib/extensions/fieldTemplate/loc/{locale}.js"
   }
 }
