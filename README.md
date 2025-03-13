@@ -2,7 +2,7 @@
 
 ## Summary
 
-Esempio di progetto SPFX in stile MAIRE da utilizzare come template.
+Esempio di progetto SPFX da utilizzare come template.
 
 TODO:
 - Creare classe SPDataService che usa PnP (ultima versione???) con metodi CRUD su lista
