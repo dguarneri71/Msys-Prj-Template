@@ -8,20 +8,8 @@ import { IDataService } from '../../../classes/services/IDataService';
 import { IWebPartTemplateState } from './IWebPartTemplateState';
 import { CommandBar, ICommandBarItemProps, IconButton, IIconProps } from '@fluentui/react';
 
-/*const groupByFields: IGrouping[] = [
-  {
-    name: "Title",
-    order: GroupOrder.ascending
-  }, {
-    name: "Author",
-    order: GroupOrder.descending
-  }
-];*/
-
 const deleteIcon: IIconProps = { iconName: 'Delete' };
 const editIcon: IIconProps = { iconName: 'Edit' };
-
-
 
 export default class WebPartTemplate extends React.Component<IWebPartTemplateProps, IWebPartTemplateState> {
   private spService: IDataService;
@@ -113,25 +101,11 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
               selection={this._getSelection}
               stickyHeader={true}
             />
-          </div>\
+          </div>
         </div>
       </section>
     );
   }
-
-  /*private async _onLoadItems(): Promise<void> {
-    //const lists = await this.spService.lists.getLists();
-    //console.log("Lists:", lists);
-
-    //Legge solo 100 elementi
-    const _items: IItem[] = await this.spService.items.getItems(this.props.listName);
-
-    console.log("Items count:", _items.length);
-
-    this.setState({
-      items: _items
-    });
-  }*/
 
   private _onLoadItems(): void {
     this.spService.items.getItems(this.props.listName).then((items: IItem[]) => {
@@ -143,18 +117,6 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       console.log(reason);
     });
   }
-
-  /*private async _onCreate(): Promise<void> {
-    const date: Date = new Date();
-    const data = {
-      Title: "TEST New - " + date.toDateString(),
-      ProjectName: "TEST DG aggiunta"
-    }
-    await this.spService.items.addItem(this.props.listName, data);
-    this.setState({
-      items: await this.spService.items.getItems(this.props.listName)
-    });
-  }*/
 
   private _onCreate(): void {
     const date: Date = new Date();
@@ -182,7 +144,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   private async _onDelete(item: any): Promise<void> {
     console.log('Selected item for delete:', item);
     try {
-      await this.spService.items.deleteItem(this.props.listName, item.Id as number);
+      await this.spService.items.deleteItem(this.props.listName, item.id as number);
       this.setState({
         items: await this.spService.items.getItems(this.props.listName)
       });
