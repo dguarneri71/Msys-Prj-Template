@@ -36,7 +36,8 @@ export default class FieldTemplateFieldCustomizer
 
   public onRenderCell(event: IFieldCustomizerCellEventParameters): void {
     // Use this method to perform your custom cell rendering.
-    const text: string = `${this.properties.sampleText}: ${event.fieldValue}`;
+    //const text: string = `${this.properties.sampleText}: ${event.fieldValue}`;
+    const text: string = `${event.fieldValue}`;
 
     const fieldTemplate: React.ReactElement<{}> =
       React.createElement(FieldTemplate, { text } as IFieldTemplateProps);

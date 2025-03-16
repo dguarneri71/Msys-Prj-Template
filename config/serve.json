@@ -2,7 +2,6 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
   "port": 4321,
   "https": true,
-  //"initialPage": "https://onguarneri.sharepoint.com/sites/CorsoSPFX/_layouts/workbench.aspx",
   "serveConfigurations": {
     "default": {
       "pageUrl": "https://onguarneri.sharepoint.com/sites/CorsoSPFX/_layouts/workbench.aspx"
@@ -22,7 +21,7 @@
     "fieldTemplate": {
       "pageUrl": "https://onguarneri.sharepoint.com/sites/CorsoSPFX/Lists/Task/AllItems.aspx",
       "fieldCustomizers": {
-        "InternalFieldName": {
+        "Percent": {
           "id": "1b07240f-29f6-4898-95cc-ae3d4c8503f8",
           "properties": {
             "sampleText": "Value"

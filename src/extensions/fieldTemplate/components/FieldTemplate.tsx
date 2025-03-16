@@ -21,7 +21,12 @@ export default class FieldTemplate extends React.Component<IFieldTemplateProps, 
   public render(): React.ReactElement<{}> {
     return (
       <div className={styles.fieldTemplate}>
-        { this.props.text }
+        <div className={styles.full}>
+          <div style={{width: (this.props.text)+"px", background:"#0094ff", color:"#c0c0c0"}}>
+            &nbsp; ${this.props.text}
+          </div>
+        </div>
+        {/*{this.props.text}*/}
       </div>
     );
   }
