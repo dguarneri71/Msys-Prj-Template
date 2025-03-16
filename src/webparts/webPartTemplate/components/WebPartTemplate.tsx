@@ -2,14 +2,18 @@ import * as React from 'react';
 import styles from './WebPartTemplate.module.scss';
 import type { IWebPartTemplateProps } from './IWebPartTemplateProps';
 import { escape } from '@microsoft/sp-lodash-subset';
-import { IItem } from '@pnp/sp/items';
+//import { IItem } from '@pnp/sp/items';
 import { ListView, IViewField, SelectionMode } from "@pnp/spfx-controls-react/lib/ListView";
 import { IDataService } from '../../../classes/services/IDataService';
 import { IWebPartTemplateState } from './IWebPartTemplateState';
 import { CommandBar, ICommandBarItemProps, IconButton, IIconProps } from '@fluentui/react';
+//import { ITask } from '../../../classes/dto/ITask';
+//import { TaskItem } from '../../../classes/dto/TaskItem';
+import { TaskItemObj } from '../../../classes/dto/TaskItemObj';
 
 const deleteIcon: IIconProps = { iconName: 'Delete' };
 const editIcon: IIconProps = { iconName: 'Edit' };
+const viewIcon: IIconProps = { iconName: 'Edit' };
 
 export default class WebPartTemplate extends React.Component<IWebPartTemplateProps, IWebPartTemplateState> {
   private spService: IDataService;
@@ -31,10 +35,11 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       name: "",
       sorting: false,
       maxWidth: 40,
-      render: (rowitem: IItem) => {
+      render: (rowitem: TaskItemObj) => {
         const buttons = <div>
           <IconButton iconProps={deleteIcon} onClick={async () => { await this._onDelete(rowitem) }} title="Delete" ariaLabel="delete" />
           <IconButton iconProps={editIcon} onClick={async () => { await this._onEdit(rowitem) }} title="Edit" ariaLabel="edit" />
+          <IconButton iconProps={viewIcon} onClick={async () => { await this._onView(rowitem) }} title="View" ariaLabel="view" />
         </div>;
         return buttons;
       }
@@ -108,7 +113,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   }
 
   private _onLoadItems(): void {
-    this.spService.items.getItems(this.props.listName).then((items: IItem[]) => {
+    this.spService.items.getItems(this.props.listName).then((items: TaskItemObj[]) => {
       console.log("Items count:", items.length);
       this.setState({
         items: items
@@ -124,8 +129,8 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       Title: "TEST New - " + date.toDateString(),
       ProjectName: "TEST DG aggiunta"
     }
-    this.spService.items.addItem(this.props.listName, data).then((item: IItem) => {
-      this.spService.items.getItems(this.props.listName).then((items: IItem[]) => {
+    this.spService.items.addItem(this.props.listName, data).then((item: TaskItemObj) => {
+      this.spService.items.getItems(this.props.listName).then((items: TaskItemObj[]) => {
         this.setState({
           items: items
         });
@@ -137,14 +142,14 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     });
   }
 
-  private _getSelection(items: IItem[]): void {
+  private _getSelection(items: TaskItemObj[]): void {
     console.log('Selected items:', items);
   }
 
-  private async _onDelete(item: any): Promise<void> {
+  private async _onDelete(item: TaskItemObj): Promise<void> {
     console.log('Selected item for delete:', item);
     try {
-      await this.spService.items.deleteItem(this.props.listName, item.id as number);
+      await this.spService.items.deleteItem(this.props.listName, item.Id as number);
       this.setState({
         items: await this.spService.items.getItems(this.props.listName)
       });
@@ -153,7 +158,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     }
   }
 
-  private async _onEdit(item: any): Promise<void> {
+  private async _onEdit(item: TaskItemObj): Promise<void> {
     console.log('Selected item for edit:', item);
     const data = {
       Title: "TEST Modifica",
@@ -164,6 +169,17 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       this.setState({
         items: await this.spService.items.getItems(this.props.listName)
       });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  private async _onView(item: TaskItemObj): Promise<void> {
+    console.log('Selected item for edit:', item);
+    try {
+      const task = await this.spService.items.getItem<TaskItemObj>(this.props.listName, item.Id as number);
+      console.log("_onView - project name: ", task.ProjectName);
+      console.log("_onView - modified: ", task.Modified);
     } catch (e) {
       console.log(e);
     }
