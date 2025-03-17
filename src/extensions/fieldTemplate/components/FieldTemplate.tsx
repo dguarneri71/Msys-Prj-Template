@@ -1,6 +1,6 @@
 import { Log } from '@microsoft/sp-core-library';
 import * as React from 'react';
-
+import { stringIsNullOrEmpty } from "@pnp/core";
 import styles from './FieldTemplate.module.scss';
 
 export interface IFieldTemplateProps {
@@ -19,14 +19,14 @@ export default class FieldTemplate extends React.Component<IFieldTemplateProps, 
   }
 
   public render(): React.ReactElement<{}> {
+    const value: string = stringIsNullOrEmpty(this.props.text) ? "0" : this.props.text;
     return (
       <div className={styles.fieldTemplate}>
         <div className={styles.full}>
-          <div style={{width: (this.props.text)+"px", background:"#0094ff", color:"#c0c0c0"}}>
-            &nbsp; ${this.props.text}
+          <div style={{ width: (value) + "px", background: "#ff0000", color: "#000" }}>
+            &nbsp; {value}%
           </div>
         </div>
-        {/*{this.props.text}*/}
       </div>
     );
   }

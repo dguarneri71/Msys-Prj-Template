@@ -71,4 +71,5 @@ Install:
 ## Command
 yo @microsoft/sharepoint
 
-gulp serve --configuration "fieldTemplate"
+gulp serve --config=csTemplate
+gulp serve --config=fieldTemplate

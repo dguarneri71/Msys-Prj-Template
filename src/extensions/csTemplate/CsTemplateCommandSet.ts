@@ -26,7 +26,7 @@ export default class CsTemplateCommandSet extends BaseListViewCommandSet<ICsTemp
     Log.info(LOG_SOURCE, 'Initialized CsTemplateCommandSet');
 
     // initial state of the command's visibility
-    const compareOneCommand: Command = this.tryGetCommand('COMMAND_1');
+    const compareOneCommand: Command = this.tryGetCommand('COMMAND_UNO');
     compareOneCommand.visible = false;
 
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged);
@@ -36,12 +36,12 @@ export default class CsTemplateCommandSet extends BaseListViewCommandSet<ICsTemp
 
   public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
     switch (event.itemId) {
-      case 'COMMAND_1':
+      case 'COMMAND_UNO':
         Dialog.alert(`${this.properties.sampleTextOne}`).catch(() => {
           /* handle error */
         });
         break;
-      case 'COMMAND_2':
+      case 'COMMAND_DUE':
         Dialog.alert(`${this.properties.sampleTextTwo}`).catch(() => {
           /* handle error */
         });
@@ -54,7 +54,7 @@ export default class CsTemplateCommandSet extends BaseListViewCommandSet<ICsTemp
   private _onListViewStateChanged = (args: ListViewStateChangedEventArgs): void => {
     Log.info(LOG_SOURCE, 'List view state changed');
 
-    const compareOneCommand: Command = this.tryGetCommand('COMMAND_1');
+    const compareOneCommand: Command = this.tryGetCommand('COMMAND_UNO');
     if (compareOneCommand) {
       // This command should be hidden unless exactly one row is selected.
       compareOneCommand.visible = this.context.listView.selectedRows?.length === 1;
