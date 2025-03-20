@@ -6,6 +6,6 @@ export interface IWebPartTemplateProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
-  dataService: IDataService; //DG aggiunta
+  dataService: IDataService | undefined; //DG aggiunta
   listName: string //DG
 }

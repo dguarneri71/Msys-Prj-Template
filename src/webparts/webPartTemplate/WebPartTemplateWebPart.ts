@@ -25,7 +25,7 @@ export default class WebPartTemplateWebPart extends BaseClientSideWebPart<IWebPa
 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
-  private _dataService: IDataService;
+  private _dataService: IDataService | undefined = undefined;
   //private _dataServicePartial: SPDataServicePartial; //DG Test utilizzo classe parziale
 
   public render(): void {

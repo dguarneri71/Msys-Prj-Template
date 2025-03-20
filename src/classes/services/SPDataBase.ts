@@ -10,8 +10,6 @@ export class SPDataBase {
 
     constructor(sp: SPFI, graph: GraphFI) {
         this._sp = sp;
-        //console.log("SP:", this._sp);
         this._graph = graph;
-        //console.log("GRAPH:", this._graph);
     }
 }

@@ -2,12 +2,12 @@
 
 export class TaskItemObj {
     key?: string;
-    Id: number;
-    Title: string;
-    ProjectName: string;
+    Id: number | undefined = undefined;
+    Title: string | undefined = undefined;
+    ProjectName: string | undefined = undefined;
     Modified?: Date;
     //ModifiedStr?: string; /* stringa solo per PNP ListView gestisce male gli oggetti date */
-    get ModifiedStr(): string | undefined {
+    /*get ModifiedText(): string | undefined {
         return this.Modified ? this.Modified?.toISOString() : undefined;
-    }
+    }*/
 }

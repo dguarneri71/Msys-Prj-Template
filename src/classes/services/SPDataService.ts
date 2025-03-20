@@ -6,9 +6,9 @@ import { graphfi, GraphFI, SPFx as gSPFx } from "@pnp/graph";
 import { IDataService } from "./IDataService";
 import { SPDataLists } from "./lists/SPDataLists";
 import { SPDataItems } from "./items/SPDataItems";
-import { SPDataFiles } from "./lists/SPDataFiles";
-import "@pnp/sp/webs";
-import "@pnp/sp/lists/web";
+import { SPDataFiles } from "./files/SPDataFiles";
+//import "@pnp/sp/webs";
+//import "@pnp/sp/lists/web";
 
 const LOG_SOURCE: string = 'SPDataService';
 
@@ -16,10 +16,10 @@ export default class SPDataService implements IDataService {
     //Registro il servizio
     public static readonly serviceKey: ServiceKey<IDataService> = ServiceKey.create<IDataService>('SPFx:SPDataService', SPDataService);
 
-    private _sp: SPFI;
-    private _graph: GraphFI;
-    private httpClient: HttpClient;
-    private aadHttpClientFactory: AadHttpClientFactory;
+    private _sp: SPFI | undefined = undefined;
+    private _graph: GraphFI | undefined = undefined;
+    private httpClient: HttpClient | undefined = undefined;
+    private aadHttpClientFactory: AadHttpClientFactory | undefined = undefined;
     //definisco le classi "d'estensione"
     private _lists: SPDataLists | undefined = undefined;
     private _items: SPDataItems | undefined = undefined;
@@ -50,22 +50,24 @@ export default class SPDataService implements IDataService {
     }
 
     //Istanzio classe SPDataLists solo se necessaria - Lazy loading
-    public get lists(): SPDataLists {
-        if (this._lists === undefined) {
+    public get lists(): SPDataLists | undefined {
+        if (this._lists === undefined && this._sp !== undefined && this._graph !== undefined) {
             this._lists = new SPDataLists(this._sp, this._graph);
         }
         return this._lists;
     }
 
-    public get items(): SPDataItems {
-        if (this._items === undefined) {
+    //Istanzio classe SPDataItems solo se necessaria - Lazy loading
+    public get items(): SPDataItems | undefined {
+        if (this._items === undefined && this._sp !== undefined && this._graph !== undefined) {
             this._items = new SPDataItems(this._sp, this._graph);
         }
         return this._items;
     }
 
-    public get files(): SPDataFiles {
-        if (this._files === undefined) {
+    //Istanzio classe SPDataFiles solo se necessaria - Lazy loading
+    public get files(): SPDataFiles | undefined {
+        if (this._files === undefined && this._sp !== undefined && this._graph !== undefined) {
             this._files = new SPDataFiles(this._sp, this._graph);
         }
         return this._files;

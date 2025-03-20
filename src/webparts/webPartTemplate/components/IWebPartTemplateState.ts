@@ -1,6 +1,8 @@
 //import { IItem } from "@pnp/sp/items";
-import { TaskItemObj } from "../../../classes/dto/TaskItemObj";
+//import { TaskItemObj } from "../../../classes/dto/TaskItemObj";
+
+import { ITaskItem } from "../../../classes/dto/ITaskItem";
 
 export interface IWebPartTemplateState {
-    items : TaskItemObj[]
+    items : ITaskItem[]
 }

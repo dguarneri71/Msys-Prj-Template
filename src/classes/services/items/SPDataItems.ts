@@ -23,25 +23,9 @@ export class SPDataItems extends SPDataBase {
         return items;
     }
 
-    //Restituire il DTO TaskItem
-    /*public async getTaskItems(listName: string): Promise<unknown[]> {
-        let items: unknown[] = [];
-        console.log(LOG_SOURCE + " - getItems() - from list '" + listName + "' ");
-        try {
-            if (!stringIsNullOrEmpty(listName)) {
-                items = await this._sp.web.lists.getByTitle(listName).items();
-            }
-        } catch (e) {
-            console.log(LOG_SOURCE + " - getItems() - error: ", e);
-        }
+    /*public async getItems4LargeList<T>(listName: string): Promise<T[]> {
+        let result: T[] = [];
 
-        return items;
-    }*/
-      
-    /*public async getItems4LargeList(listName: string): Promise<IItem[]> {
-        let result: any = [];
-
-        //TODO: come si fa?
         for await (const items of this._sp.web.lists.getByTitle(listName).items.top(1000)) {
             console.log(items); //array of 10 items
             result = result.concat(items);
@@ -52,14 +36,21 @@ export class SPDataItems extends SPDataBase {
     }*/
 
     //Metodo per recuperare un singolo item
-    public async getItem<T>(listName: string, itemId: number): Promise<T> {
-        const item: T = await this._sp.web.lists.getByTitle(listName).items.getById(itemId)();
-        return item;
+    public async getItem<T>(listName: string, itemId: number | undefined): Promise<T | undefined> {
+        if (itemId !== undefined) {
+            const item: T = await this._sp.web.lists.getByTitle(listName).items.getById(itemId)();
+            return item;
+        }
+        else{
+            return undefined;
+        }
     }
 
     //Metodo per aggiornare un item
-    public async updateItem(listName: string, itemId: number, data: Record<string, unknown>): Promise<void> {
-        await this._sp.web.lists.getByTitle(listName).items.getById(itemId).update(data);
+    public async updateItem(listName: string, itemId: number | undefined, data: Record<string, unknown>): Promise<void> {
+        if (itemId !== undefined) {
+            await this._sp.web.lists.getByTitle(listName).items.getById(itemId).update(data);
+        }
     }
 
     //Metodo per aggiungere un item
@@ -68,15 +59,17 @@ export class SPDataItems extends SPDataBase {
     }
 
     //Metodo per cancellare un item
-    public async deleteItem(listName: string, itemId: number): Promise<void> {
+    public async deleteItem(listName: string, itemId: number | undefined): Promise<void> {
         console.log(LOG_SOURCE + " - deleteItem() - from list '" + listName + "' - ID: '" + itemId + "' ");
-        try {
-            //await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
-            await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
-            console.log(LOG_SOURCE + " - deleteItem() - item deleted.");
-        }
-        catch (e) {
-            console.log(LOG_SOURCE + " - deleteItem() - item deleted with error.", e);
+        if (itemId !== undefined) {
+            try {
+                //await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
+                await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
+                console.log(LOG_SOURCE + " - deleteItem() - item deleted.");
+            }
+            catch (e) {
+                console.log(LOG_SOURCE + " - deleteItem() - item deleted with error.", e);
+            }
         }
     }
 }
