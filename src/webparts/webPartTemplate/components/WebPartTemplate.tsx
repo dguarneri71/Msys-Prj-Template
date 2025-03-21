@@ -6,7 +6,8 @@ import { ListView, IViewField, SelectionMode } from "@pnp/spfx-controls-react/li
 import { IDataService } from '../../../classes/services/IDataService';
 import { IWebPartTemplateState } from './IWebPartTemplateState';
 import { CommandBar, ICommandBarItemProps, IconButton, IIconProps } from '@fluentui/react';
-import { ITaskItem } from '../../../classes/dto/ITaskItem';
+//import { ITaskItem } from '../../../classes/dto/ITaskItem';
+import { ISPTaskItem } from '../../../classes/dto/ISPTaskItem';
 //import { TaskItem } from '../../../classes/dto/TaskItem';
 //import { TaskItemObj } from '../../../classes/dto/TaskItemObj';
 import { formatDate } from '../../../classes/helpers/DateHelper';
@@ -36,7 +37,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     {
       name: "Modified",
       maxWidth: 150,
-      render: (rowitem: ITaskItem) => {
+      render: (rowitem: ISPTaskItem) => {
         const value = formatDate(rowitem.Modified, "it-IT", true);
         return <span>{value}</span>;
       }
@@ -45,7 +46,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       name: "",
       sorting: false,
       maxWidth: 40,
-      render: (rowitem: ITaskItem) => {
+      render: (rowitem: ISPTaskItem) => {
         const buttons = <div>
           <IconButton iconProps={deleteIcon} onClick={async () => { await this._onDelete(rowitem) }} title="Delete" ariaLabel="delete" />
           <IconButton iconProps={editIcon} onClick={async () => { await this._onEdit(rowitem) }} title="Edit" ariaLabel="edit" />
@@ -123,7 +124,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   }
 
   private _onLoadItems(): void {
-    this.spService?.items?.getItems<ITaskItem>(this.props.listName).then((items: ITaskItem[]) => {
+    this.spService?.items?.getItems<ISPTaskItem>(this.props.listName).then((items: ISPTaskItem[]) => {
       console.log("_onLoadItems - Items count: ", items.length);
       this.setState({
         items: items
@@ -139,7 +140,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       Title: "TEST New - " + date.toDateString(),
       ProjectName: "TEST DG aggiunta"
     }
-    this.spService?.items?.addItem<ITaskItem>(this.props.listName, data).then((item: ITaskItem) => {
+    this.spService?.items?.addItem<ISPTaskItem>(this.props.listName, data).then((item: ISPTaskItem) => {
       //console.log("Added item: ", item);
       this._onLoadItems();
     }).catch(reason => {
@@ -147,40 +148,40 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     });
   }
 
-  private _getSelection(items: ITaskItem[]): void {
+  private _getSelection(items: ISPTaskItem[]): void {
     console.log('_getSelection - Selected items:', items);
   }
 
-  private async _onDelete(item: ITaskItem): Promise<void> {
+  private async _onDelete(item: ISPTaskItem): Promise<void> {
     console.log('_onDelete - Selected item for delete:', item);
     try {
-      await this.spService?.items?.deleteItem(this.props.listName, item.Id);
+      await this.spService?.items?.deleteItem(this.props.listName, item);
       this._onLoadItems();
     } catch (e) {
       console.log("_onDelete - error: ", e);
     }
   }
 
-  private async _onEdit(item: ITaskItem): Promise<void> {
+  private async _onEdit(item: ISPTaskItem): Promise<void> {
     console.log('_onEdit - Selected item for edit:', item);
     const data = {
       Title: "TEST Modifica",
       ProjectName: "TEST DG modifica"
     }
     try {
-      await this.spService?.items?.updateItem(this.props.listName, item.Id, data);
+      await this.spService?.items?.updateItem(this.props.listName, item, data);
       this._onLoadItems();
     } catch (e) {
       console.log("_onEdit - error: ", e);
     }
   }
 
-  private async _onView(item: ITaskItem): Promise<void> {
+  private async _onView(item: ISPTaskItem): Promise<void> {
     console.log('Selected item for edit:', item);
     try {
-      const task = await this.spService?.items?.getItem<ITaskItem>(this.props.listName, item.Id);
-      console.log("_onView - project name: ", task?.ProjectName);
-      console.log("_onView - modified: ", task?.Modified);
+      const task = await this.spService?.items?.getItem<ISPTaskItem>(this.props.listName, item);
+      console.log("_onView - project name: ", task?.ProjectName); //Proprietà di ITaskItem
+      console.log("_onView - modified: ", task?.Modified); //Proprietà di ISPItem
     } catch (e) {
       console.log("_onView - error: ", e);
     }

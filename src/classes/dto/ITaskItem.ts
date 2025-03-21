@@ -1,6 +1,9 @@
 export interface ITaskItem {
-    Id: number;
-    Title?: string;
     ProjectName?: string;
-    Modified?: Date;
+    StarDate?: Date;
+    EndDate?: Date;
+    TaskDetails?: string;
+    NumericTest?: number;
+    DG_NumericTest?: number;
+    Percent?: number;
 }

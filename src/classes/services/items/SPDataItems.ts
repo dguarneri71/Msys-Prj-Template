@@ -4,6 +4,7 @@ import { stringIsNullOrEmpty } from "@pnp/core";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
+import { ISPItem } from "../../dto/ISPItem";
 
 const LOG_SOURCE: string = 'SPDataItems';
 export class SPDataItems extends SPDataBase {
@@ -36,21 +37,25 @@ export class SPDataItems extends SPDataBase {
     }*/
 
     //Metodo per recuperare un singolo item
-    public async getItem<T>(listName: string, itemId: number | undefined): Promise<T | undefined> {
+    /*public async getItem<T>(listName: string, itemId: number | undefined): Promise<T | undefined> {
         if (itemId !== undefined) {
             const item: T = await this._sp.web.lists.getByTitle(listName).items.getById(itemId)();
             return item;
         }
-        else{
+        else {
             return undefined;
         }
+    }*/
+
+    //Parametro destrutturato - significa che del parametro passato prendo solo la proprietà Id
+    public async getItem<T>(listName: string, { Id }: ISPItem): Promise<T> {
+        const item: T = await this._sp.web.lists.getByTitle(listName).items.getById(Id)();
+        return item;
     }
 
     //Metodo per aggiornare un item
-    public async updateItem(listName: string, itemId: number | undefined, data: Record<string, unknown>): Promise<void> {
-        if (itemId !== undefined) {
-            await this._sp.web.lists.getByTitle(listName).items.getById(itemId).update(data);
-        }
+    public async updateItem(listName: string, { Id }: ISPItem, data: Record<string, unknown>): Promise<void> {
+        await this._sp.web.lists.getByTitle(listName).items.getById(Id).update(data);
     }
 
     //Metodo per aggiungere un item
@@ -59,17 +64,15 @@ export class SPDataItems extends SPDataBase {
     }
 
     //Metodo per cancellare un item
-    public async deleteItem(listName: string, itemId: number | undefined): Promise<void> {
-        console.log(LOG_SOURCE + " - deleteItem() - from list '" + listName + "' - ID: '" + itemId + "' ");
-        if (itemId !== undefined) {
-            try {
-                //await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
-                await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
-                console.log(LOG_SOURCE + " - deleteItem() - item deleted.");
-            }
-            catch (e) {
-                console.log(LOG_SOURCE + " - deleteItem() - item deleted with error.", e);
-            }
+    public async deleteItem(listName: string, { Id }: ISPItem): Promise<void> {
+        console.log(LOG_SOURCE + " - deleteItem() - from list '" + listName + "' - ID: '" + Id + "' ");
+        try {
+            //await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
+            await this._sp.web.lists.getByTitle(listName).items.getById(Id).delete();
+            console.log(LOG_SOURCE + " - deleteItem() - item deleted.");
+        }
+        catch (e) {
+            console.log(LOG_SOURCE + " - deleteItem() - item deleted with error.", e);
         }
     }
 }
