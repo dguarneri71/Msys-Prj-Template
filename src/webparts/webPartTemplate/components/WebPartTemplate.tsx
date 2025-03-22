@@ -6,11 +6,17 @@ import { ListView, IViewField, SelectionMode } from "@pnp/spfx-controls-react/li
 import { IDataService } from '../../../classes/services/IDataService';
 import { IWebPartTemplateState } from './IWebPartTemplateState';
 import { CommandBar, ICommandBarItemProps, IconButton, IIconProps } from '@fluentui/react';
+import { Dialog } from '@microsoft/sp-dialog';
 //import { ITaskItem } from '../../../classes/dto/ITaskItem';
 import { ISPTaskItem } from '../../../classes/dto/ISPTaskItem';
 //import { TaskItem } from '../../../classes/dto/TaskItem';
 //import { TaskItemObj } from '../../../classes/dto/TaskItemObj';
 import { formatDate } from '../../../classes/helpers/DateHelper';
+import { TSPItem } from '../../../classes/dto/TSPItem';
+import { ITaskItem } from '../../../classes/dto/ITaskItem';
+import { FactorySPItem } from '../../../classes/helpers/FactorySPItem';
+import { TaskItem } from '../../../classes/dto/TaskItem';
+import { ITaskItem2 } from '../../../classes/dto/ITaskItem2';
 
 
 const deleteIcon: IIconProps = { iconName: 'Delete' };
@@ -20,6 +26,7 @@ const viewIcon: IIconProps = { iconName: 'View' };
 export default class WebPartTemplate extends React.Component<IWebPartTemplateProps, IWebPartTemplateState> {
   private spService: IDataService | undefined = undefined;
 
+  //Elenco delle colonne mostrate dalla ListView
   private viewFields: IViewField[] = [
     {
       name: "Title",
@@ -57,6 +64,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     }
   ];
 
+  //Elenco dei comandei della Toolbar
   private _barItems: ICommandBarItemProps[] = [
     {
       key: 'load',
@@ -70,6 +78,12 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       iconProps: { iconName: 'NewFolder' },
       onClick: (ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined) => { this._onCreate() }
     },
+    {
+      key: 'test',
+      text: 'Get items',
+      iconProps: { iconName: 'TestPlan' },
+      onClick: (ev?: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined) => { this._onGetItems() }
+    }
   ];
 
   constructor(props: IWebPartTemplateProps) {
@@ -124,14 +138,19 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   }
 
   private _onLoadItems(): void {
-    this.spService?.items?.getItems<ISPTaskItem>(this.props.listName).then((items: ISPTaskItem[]) => {
-      console.log("_onLoadItems - Items count: ", items.length);
-      this.setState({
-        items: items
+    try {
+      this.spService?.items?.getItems<ISPTaskItem>(this.props.listName).then((items: ISPTaskItem[]) => {
+        console.log("_onLoadItems - Items count: ", items.length);
+        this.setState({
+          items: items
+        });
+      }).catch(reason => {
+        console.log("_onLoadItems - error: ", reason);
       });
-    }).catch(reason => {
-      console.log("_onLoadItems - error: ", reason);
-    });
+    }
+    catch (error: unknown) {
+      console.log("_onLoadItems - error: ", error);
+    }
   }
 
   private _onCreate(): void {
@@ -141,10 +160,29 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       ProjectName: "TEST DG aggiunta"
     }
     this.spService?.items?.addItem<ISPTaskItem>(this.props.listName, data).then((item: ISPTaskItem) => {
-      //console.log("Added item: ", item);
       this._onLoadItems();
     }).catch(reason => {
       console.log("_onCreate - error: ", reason);
+    });
+  }
+
+  private _onGetItems(): void {
+    this.spService?.items?.getItems<TSPItem>(this.props.listName).then(async (items) => {
+      let message: string = "Nessun items caricato";
+      if (items && items.length > 0) {
+        const item: TSPItem = items[0]
+        message = JSON.stringify(item, null, 2);
+        console.log("_onGetItems - item: ", message);
+        console.log("_onGetItems - property ProjectName value: ", item.ProjectName);
+        console.log("_onGetItems - property DG_NumericTest value: ", item.DG_NumericTest ?? "Valore vuoto")
+        const objTask: ITaskItem2 = new TaskItem();
+        console.log("_onGetItems - oggetto task nuovo: ", objTask);
+        const task: ITaskItem = FactorySPItem.createObject<TaskItem, ITaskItem2>(TaskItem, item);
+        console.log("_onGetItems - oggetto task: ", task);
+      }
+      await Dialog.alert(message);
+    }).catch((reason: unknown) => {
+      console.log("_onGetItems - error type: ", typeof reason);
     });
   }
 
@@ -157,8 +195,13 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     try {
       await this.spService?.items?.deleteItem(this.props.listName, item);
       this._onLoadItems();
-    } catch (e) {
-      console.log("_onDelete - error: ", e);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        await Dialog.alert(error.message);
+      }
+      else {
+        console.error("_onDelete - generic error: ", error);
+      }
     }
   }
 
@@ -171,8 +214,8 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     try {
       await this.spService?.items?.updateItem(this.props.listName, item, data);
       this._onLoadItems();
-    } catch (e) {
-      console.log("_onEdit - error: ", e);
+    } catch (error: unknown) {
+      console.log("_onEdit - error: ", error);
     }
   }
 
@@ -182,8 +225,8 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       const task = await this.spService?.items?.getItem<ISPTaskItem>(this.props.listName, item);
       console.log("_onView - project name: ", task?.ProjectName); //Proprietà di ITaskItem
       console.log("_onView - modified: ", task?.Modified); //Proprietà di ISPItem
-    } catch (e) {
-      console.log("_onView - error: ", e);
+    } catch (error: unknown) {
+      console.log("_onView - error: ", error);
     }
   }
 }

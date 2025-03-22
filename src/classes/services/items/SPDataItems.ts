@@ -24,7 +24,9 @@ export class SPDataItems extends SPDataBase {
         return items;
     }
 
-    /*public async getItems4LargeList<T>(listName: string): Promise<T[]> {
+    /*
+    //Non funziona
+    public async getItems4LargeList<T>(listName: string): Promise<T[]> {
         let result: T[] = [];
 
         for await (const items of this._sp.web.lists.getByTitle(listName).items.top(1000)) {
@@ -66,13 +68,23 @@ export class SPDataItems extends SPDataBase {
     //Metodo per cancellare un item
     public async deleteItem(listName: string, { Id }: ISPItem): Promise<void> {
         console.log(LOG_SOURCE + " - deleteItem() - from list '" + listName + "' - ID: '" + Id + "' ");
+
+        //Demo errore
+        if (Id % 2 === 0) {
+            throw new Error("Non puoi cancellare gli elementi pari");
+        }
+
         try {
-            //await this._sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
             await this._sp.web.lists.getByTitle(listName).items.getById(Id).delete();
             console.log(LOG_SOURCE + " - deleteItem() - item deleted.");
         }
-        catch (e) {
-            console.log(LOG_SOURCE + " - deleteItem() - item deleted with error.", e);
+        catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log(LOG_SOURCE + " - deleteItem() - item deleted with error: '" + error.message + "'");
+            }
+            else {
+                console.log(LOG_SOURCE + " - deleteItem() - item deleted with generic error: ", error);
+            }
         }
     }
 }
