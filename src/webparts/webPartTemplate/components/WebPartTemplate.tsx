@@ -8,7 +8,7 @@ import { IWebPartTemplateState } from './IWebPartTemplateState';
 import { CommandBar, ICommandBarItemProps, IconButton, IIconProps } from '@fluentui/react';
 import { Dialog } from '@microsoft/sp-dialog';
 //import { ITaskItem } from '../../../classes/dto/ITaskItem';
-import { ISPTaskItem } from '../../../classes/dto/ISPTaskItem';
+import { TSPTaskItem } from '../../../classes/dto/TSPTaskItem';
 //import { TaskItem } from '../../../classes/dto/TaskItem';
 //import { TaskItemObj } from '../../../classes/dto/TaskItemObj';
 import { formatDate } from '../../../classes/helpers/DateHelper';
@@ -16,7 +16,8 @@ import { TSPItem } from '../../../classes/dto/TSPItem';
 import { ITaskItem } from '../../../classes/dto/ITaskItem';
 import { FactorySPItem } from '../../../classes/helpers/FactorySPItem';
 import { TaskItem } from '../../../classes/dto/TaskItem';
-import { ITaskItem2 } from '../../../classes/dto/ITaskItem2';
+import { ISPItem } from '../../../classes/dto/ISPItem';
+import { SPItem } from '../../../classes/dto/SPItem';
 
 
 const deleteIcon: IIconProps = { iconName: 'Delete' };
@@ -44,7 +45,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     {
       name: "Modified",
       maxWidth: 150,
-      render: (rowitem: ISPTaskItem) => {
+      render: (rowitem: TSPTaskItem) => {
         const value = formatDate(rowitem.Modified, "it-IT", true);
         return <span>{value}</span>;
       }
@@ -53,7 +54,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       name: "",
       sorting: false,
       maxWidth: 40,
-      render: (rowitem: ISPTaskItem) => {
+      render: (rowitem: TSPTaskItem) => {
         const buttons = <div>
           <IconButton iconProps={deleteIcon} onClick={async () => { await this._onDelete(rowitem) }} title="Delete" ariaLabel="delete" />
           <IconButton iconProps={editIcon} onClick={async () => { await this._onEdit(rowitem) }} title="Edit" ariaLabel="edit" />
@@ -139,7 +140,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
 
   private _onLoadItems(): void {
     try {
-      this.spService?.items?.getItems<ISPTaskItem>(this.props.listName).then((items: ISPTaskItem[]) => {
+      this.spService?.items?.getItems<TSPTaskItem>(this.props.listName).then((items: TSPTaskItem[]) => {
         console.log("_onLoadItems - Items count: ", items.length);
         this.setState({
           items: items
@@ -159,7 +160,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       Title: "TEST New - " + date.toDateString(),
       ProjectName: "TEST DG aggiunta"
     }
-    this.spService?.items?.addItem<ISPTaskItem>(this.props.listName, data).then((item: ISPTaskItem) => {
+    this.spService?.items?.addItem<TSPTaskItem>(this.props.listName, data).then((item: TSPTaskItem) => {
       this._onLoadItems();
     }).catch(reason => {
       console.log("_onCreate - error: ", reason);
@@ -175,22 +176,33 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
         console.log("_onGetItems - item: ", message);
         console.log("_onGetItems - property ProjectName value: ", item.ProjectName);
         console.log("_onGetItems - property DG_NumericTest value: ", item.DG_NumericTest ?? "Valore vuoto")
-        const objTask: ITaskItem2 = new TaskItem();
-        console.log("_onGetItems - oggetto task nuovo: ", objTask);
-        const task: ITaskItem = FactorySPItem.createObject<TaskItem, ITaskItem2>(TaskItem, item);
+        const task: ITaskItem = FactorySPItem.createObject<ITaskItem, TaskItem>(TaskItem, item);
         console.log("_onGetItems - oggetto task: ", task);
+        console.log("_onGetItems - oggetto task: ", task.ModifiedFormatted);
       }
       await Dialog.alert(message);
+
+      //Recupero un item da un'altra lista
+      this.spService?.items?.getItems<TSPItem>("Settings").then(async (items) => {
+        if (items && items.length > 0) {
+          const item: TSPItem = items[0]
+          const objSetting: ISPItem = FactorySPItem.createObject<ISPItem, SPItem>(SPItem, item);
+          console.log("_onGetItems - oggetto setting: ", objSetting);
+        }
+      }).catch((reason: unknown) => {
+        console.log("_onGetItems - error: ", reason);
+        console.log("_onGetItems - error type: ", typeof reason);
+      });
     }).catch((reason: unknown) => {
       console.log("_onGetItems - error type: ", typeof reason);
     });
   }
 
-  private _getSelection(items: ISPTaskItem[]): void {
+  private _getSelection(items: TSPTaskItem[]): void {
     console.log('_getSelection - Selected items:', items);
   }
 
-  private async _onDelete(item: ISPTaskItem): Promise<void> {
+  private async _onDelete(item: TSPTaskItem): Promise<void> {
     console.log('_onDelete - Selected item for delete:', item);
     try {
       await this.spService?.items?.deleteItem(this.props.listName, item);
@@ -205,7 +217,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     }
   }
 
-  private async _onEdit(item: ISPTaskItem): Promise<void> {
+  private async _onEdit(item: TSPTaskItem): Promise<void> {
     console.log('_onEdit - Selected item for edit:', item);
     const data = {
       Title: "TEST Modifica",
@@ -219,10 +231,10 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     }
   }
 
-  private async _onView(item: ISPTaskItem): Promise<void> {
+  private async _onView(item: TSPTaskItem): Promise<void> {
     console.log('Selected item for edit:', item);
     try {
-      const task = await this.spService?.items?.getItem<ISPTaskItem>(this.props.listName, item);
+      const task = await this.spService?.items?.getItem<TSPTaskItem>(this.props.listName, item);
       console.log("_onView - project name: ", task?.ProjectName); //Proprietà di ITaskItem
       console.log("_onView - modified: ", task?.Modified); //Proprietà di ISPItem
     } catch (error: unknown) {

@@ -1,17 +1,30 @@
-import { ITaskItem2 } from "./ITaskItem2";
+import { formatDate } from "../helpers/DateHelper";
+import { ITaskItem } from "./ITaskItem";
+import { SPItem } from "./SPItem";
 
-export class TaskItem implements ITaskItem2 {
-    ProjectName: string | undefined = undefined;
-    StarDate: Date | undefined = undefined;
-    EndDate: Date | undefined = undefined;
-    TaskDetails: string | undefined = undefined;
-    NumericTest: number | undefined = undefined;
-    DG_NumericTest: number | undefined = undefined;
-    Percent: number | undefined = undefined;
-    Id: number = 0;
-    Title: string | undefined = undefined;
-    Modified: Date = new Date();
-    Created: Date = new Date();
-    Author: string = "";
-    Editor: string = "";
+export class TaskItem extends SPItem implements ITaskItem {
+    ProjectName?: string;
+    StarDate?: Date;
+    EndDate?: Date;
+    TaskDetails?: string;
+    NumericTest?: number;
+    DG_NumericTest?: number;
+    Percent?: number;
+
+    constructor() {
+        super();
+        this.ProjectName = undefined;
+        this.StarDate = undefined;
+        this.EndDate = undefined;
+        this.TaskDetails = undefined;
+        this.NumericTest = undefined;
+        this.StarDate = undefined;
+        this.DG_NumericTest = undefined;
+        this.Percent = undefined;
+    }
+
+    public get ModifiedFormatted() : string {
+        return formatDate(this.Modified, "it-IT", true);
+    }
+    
 }

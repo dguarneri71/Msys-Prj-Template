@@ -1,7 +1,7 @@
 //import { ITaskItem } from "../../../classes/dto/ITaskItem";
-import { ISPTaskItem } from "../../../classes/dto/ISPTaskItem";
+import { TSPTaskItem } from "../../../classes/dto/TSPTaskItem";
 
 
 export interface IWebPartTemplateState {
-    items : ISPTaskItem[]
+    items : TSPTaskItem[]
 }

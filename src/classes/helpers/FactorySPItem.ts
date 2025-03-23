@@ -1,19 +1,19 @@
 import { TSPItem } from "../dto/TSPItem";
 
 export class FactorySPItem {
-    static createObject<T extends U, U>(tipo: new () => T, values: TSPItem): T {
+    //Metodo che restituisce un oggetto valorizzato che implementa una certa interfaccia
+    // U: interfaccia usata da modello
+    // T: l'oggetto
+    // Values: i valori da assegnare all'oggetto
+    static createObject<U, T extends U>(tipo: new () => T, values: TSPItem): T {
         const oggetto = new tipo();
-        console.log("OGGETTO: ", oggetto);
         return this.fillProperties(oggetto, values);
     }
 
-    static fillProperties<T>(
-        obj: T,
-        valori: TSPItem
-    ): T {
-        console.log("VALORI: ", valori);
+    //Metodo per valorizzare le proprietà di un oggetto copiandole da un tipo TSPITem
+    private static fillProperties<T>(obj: T, valori: TSPItem): T {
+        //Notare l'uso di 'unknown' serve per dire al compilatore di fidarsi che stiamo cercando di convertire un oggetto
         const chiavi = Object.keys(obj as unknown as object) as (keyof T)[];
-        console.log("CHIAVI: ", chiavi);
 
         chiavi.forEach(chiave => {
             if (chiave in valori) {

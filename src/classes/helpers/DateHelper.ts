@@ -12,7 +12,7 @@ export const formatDate = (date?: Date | string, locale?: string, dateOnly?: boo
     };
 
     if (typeof date === "string") {
-        const dt = new Date(date);
+        const dt: Date = new Date(date);
         return new Intl.DateTimeFormat(loc, options).format(dt)
     } else if (date !== undefined) {
         return new Intl.DateTimeFormat(loc, options).format(date)
