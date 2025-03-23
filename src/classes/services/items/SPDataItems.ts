@@ -1,10 +1,9 @@
 import { SPDataBase } from "../SPDataBase";
-//import { IItem } from "@pnp/sp/items";
 import { stringIsNullOrEmpty } from "@pnp/core";
+import { ISPItem } from "../../dto/ISPItem";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
-import { ISPItem } from "../../dto/ISPItem";
 
 const LOG_SOURCE: string = 'SPDataItems';
 export class SPDataItems extends SPDataBase {
@@ -36,17 +35,6 @@ export class SPDataItems extends SPDataBase {
         }
 
         return result;
-    }*/
-
-    //Metodo per recuperare un singolo item
-    /*public async getItem<T>(listName: string, itemId: number | undefined): Promise<T | undefined> {
-        if (itemId !== undefined) {
-            const item: T = await this._sp.web.lists.getByTitle(listName).items.getById(itemId)();
-            return item;
-        }
-        else {
-            return undefined;
-        }
     }*/
 
     //Parametro destrutturato - significa che del parametro passato prendo solo la proprietà Id

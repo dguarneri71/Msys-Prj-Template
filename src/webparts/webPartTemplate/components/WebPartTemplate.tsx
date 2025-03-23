@@ -7,10 +7,7 @@ import { IDataService } from '../../../classes/services/IDataService';
 import { IWebPartTemplateState } from './IWebPartTemplateState';
 import { CommandBar, ICommandBarItemProps, IconButton, IIconProps } from '@fluentui/react';
 import { Dialog } from '@microsoft/sp-dialog';
-//import { ITaskItem } from '../../../classes/dto/ITaskItem';
 import { TSPTaskItem } from '../../../classes/dto/TSPTaskItem';
-//import { TaskItem } from '../../../classes/dto/TaskItem';
-//import { TaskItemObj } from '../../../classes/dto/TaskItemObj';
 import { formatDate } from '../../../classes/helpers/DateHelper';
 import { TSPItem } from '../../../classes/dto/TSPItem';
 import { ITaskItem } from '../../../classes/dto/ITaskItem';
@@ -18,7 +15,6 @@ import { FactorySPItem } from '../../../classes/helpers/FactorySPItem';
 import { TaskItem } from '../../../classes/dto/TaskItem';
 import { ISPItem } from '../../../classes/dto/ISPItem';
 import { SPItem } from '../../../classes/dto/SPItem';
-
 
 const deleteIcon: IIconProps = { iconName: 'Delete' };
 const editIcon: IIconProps = { iconName: 'Edit' };
