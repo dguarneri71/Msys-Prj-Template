@@ -74,3 +74,5 @@ yo @microsoft/sharepoint
 gulp serve --config=csTemplate
 
 gulp serve --config=fieldTemplate
+
+gulp clean; gulp bundle --ship; gulp package-solution --ship
