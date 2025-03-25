@@ -14,7 +14,7 @@ export class SPDataItems extends SPDataBase {
         console.log(LOG_SOURCE + " - getItems() - from list '" + listName + "' ");
         try {
             if (!stringIsNullOrEmpty(listName)) {
-                items = await this._sp.web.lists.getByTitle(listName).items();
+                items = await this._sp.web.lists.getByTitle(listName).items.select("*", "Author/ID", "Author/Title").expand("Author")();
             }
         } catch (e) {
             console.log(LOG_SOURCE + " - getItems() - error: ", e);
@@ -39,7 +39,8 @@ export class SPDataItems extends SPDataBase {
 
     //Parametro destrutturato - significa che del parametro passato prendo solo la proprietà Id
     public async getItem<T>(listName: string, { Id }: ISPItem): Promise<T> {
-        const item: T = await this._sp.web.lists.getByTitle(listName).items.getById(Id)();
+        const item: T = await this._sp.web.lists.getByTitle(listName).items.getById(Id).select("*", "Author/ID", "Author/Title").expand("Author")();
+        console.log("getItem: ", item);
         return item;
     }
 
