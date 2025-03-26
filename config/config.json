@@ -25,6 +25,14 @@
           "manifest": "./src/extensions/fieldTemplate/FieldTemplateFieldCustomizer.manifest.json"
         }
       ]
+    },
+    "history-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/history/HistoryCommandSet.js",
+          "manifest": "./src/extensions/history/HistoryCommandSet.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -33,6 +41,7 @@
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
     "CsTemplateCommandSetStrings": "lib/extensions/csTemplate/loc/{locale}.js",
-    "FieldTemplateFieldCustomizerStrings": "lib/extensions/fieldTemplate/loc/{locale}.js"
+    "FieldTemplateFieldCustomizerStrings": "lib/extensions/fieldTemplate/loc/{locale}.js",
+    "HistoryCommandSetStrings": "lib/extensions/history/loc/{locale}.js"
   }
 }

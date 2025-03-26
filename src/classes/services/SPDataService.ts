@@ -7,6 +7,7 @@ import { IDataService } from "./IDataService";
 import { SPDataLists } from "./lists/SPDataLists";
 import { SPDataItems } from "./items/SPDataItems";
 import { SPDataFiles } from "./files/SPDataFiles";
+import { SPDataGraph } from "./graphLib/SPDataGraph";
 //import "@pnp/sp/webs";
 //import "@pnp/sp/lists/web";
 
@@ -24,6 +25,7 @@ export default class SPDataService implements IDataService {
     private _lists: SPDataLists | undefined = undefined;
     private _items: SPDataItems | undefined = undefined;
     private _files: SPDataFiles | undefined = undefined;
+    private _graphLib: SPDataGraph | undefined = undefined;
 
     //Costruttore per inizializzare pnp/pnpjs, usa gli scope.
     //https://ypcode.io/posts/2019/01/spfx-webpart-scoped-service/
@@ -71,5 +73,13 @@ export default class SPDataService implements IDataService {
             this._files = new SPDataFiles(this._sp, this._graph);
         }
         return this._files;
+    }
+
+    //Istanzio classe SPDataGraph solo se necessaria - Lazy loading
+    public get graphLib(): SPDataGraph | undefined {
+        if (this._graphLib === undefined && this._sp !== undefined && this._graph !== undefined) {
+            this._graphLib = new SPDataGraph(this._sp, this._graph);
+        }
+        return this._graphLib;
     }
 }

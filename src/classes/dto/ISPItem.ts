@@ -1,9 +1,12 @@
-//TODO: creare type Person da assegnare a Author ed Edit
+export interface IPerson {
+    Name: string;
+    Title: string;
+}
 export interface ISPItem {
     Id: number;
     Title?: string;
     Modified: Date;
     Created: Date;
-    Author: string;
+    Author: IPerson;
     Editor: string;
 }

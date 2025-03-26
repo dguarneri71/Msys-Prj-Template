@@ -1,11 +1,11 @@
-import { ISPItem } from "./ISPItem";
+import { IPerson, ISPItem } from "./ISPItem";
 
 export class SPItem implements ISPItem {
     Id: number;
     Title?: string;
     Modified: Date;
     Created: Date;
-    Author: string;
+    Author: IPerson;
     Editor: string;
 
     constructor() {
@@ -13,7 +13,7 @@ export class SPItem implements ISPItem {
         this.Title = undefined;
         this.Modified = new Date();
         this.Created = new Date();
-        this.Author = "";
+        this.Author = {Name: "", Title: ""};
         this.Editor = "";
     }
 }
