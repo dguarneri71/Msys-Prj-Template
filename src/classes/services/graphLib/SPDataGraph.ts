@@ -1,9 +1,7 @@
-import { ISite } from "@pnp/graph/sites";
 import { SPDataBase } from "../SPDataBase";
 import "@pnp/graph/sites";
-import "@pnp/graph/files";
 import "@pnp/graph/lists";
-import "@pnp/graph/list-items";
+//import "@pnp/graph/list-items";
 
 const LOG_SOURCE: string = 'SPDataGraph';
 
@@ -13,24 +11,24 @@ export class SPDataGraph extends SPDataBase {
         console.log(LOG_SOURCE + " - getHistory - start on list: ", listRelUrl);
         console.log(LOG_SOURCE + " - getHistory - item id: ", itemId);
         //const serverRelativeUrl: string = "/sites/CorsoSPFX"
-        const site: ISite = await this._graph.sites.getByUrl(this.sharepointHostName, serverRelativeUrl);
+        const site = await this._graph.sites.getByUrl(this.sharepointHostName, serverRelativeUrl);
         console.log(LOG_SOURCE + " - getHistory - Site: ", site);
 
-        const drives = await site.drives();
-        console.log(LOG_SOURCE + " - getHistory - drives: ", drives);
-        let selectedDrive = undefined;
+        const lists = await site.lists();
+        console.log(LOG_SOURCE + " - getHistory - lists: ", lists);
+        let selectedListId: string | undefined = undefined;
 
-        drives.forEach(element => {
+        lists.forEach(element => {
             console.log(LOG_SOURCE + " - getHistory - drive webUrl: ", element.webUrl);
             if (element.webUrl && decodeURI(element.webUrl).indexOf(listRelUrl) > 0) {
-                selectedDrive = element;
+                selectedListId = element.id;
                 return;
             }
         });
 
-        if (selectedDrive !== undefined && selectedDrive) {
-            console.log(LOG_SOURCE + " - getHistory - selected drive: ", selectedDrive);
-            //await selectedDrive["Id"]
+        if (selectedListId !== undefined && selectedListId) {
+            console.log(LOG_SOURCE + " - getHistory - selected list ID: ", selectedListId);
+            //await this._graph.sites.getById(site[])
         }
 
         return undefined;

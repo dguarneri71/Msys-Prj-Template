@@ -9,6 +9,8 @@ import {
 import { Dialog } from '@microsoft/sp-dialog';
 import { IDataService } from '../../classes/services/IDataService';
 import SPDataService from '../../classes/services/SPDataService';
+import "@pnp/sp/items";
+import '@pnp/sp/items';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -42,7 +44,7 @@ export default class HistoryCommandSet extends BaseListViewCommandSet<IHistoryCo
   }
 
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
-    const sitRelativeeUrl: string = "/sites/CorsoSPFX";
+    //const sitRelativeUrl: string = "/sites/CorsoSPFX";
     switch (event.itemId) {
       case 'COMMAND_History': {
         const item: RowAccessor = event.selectedRows[0];
@@ -56,10 +58,20 @@ export default class HistoryCommandSet extends BaseListViewCommandSet<IHistoryCo
         const relUrl: string = DocLibUrl.replace("/" + FileLeafRef, "").replace("https://"+ this._dataService?.graphLib?.sharepointHostName, "");
         console.log("onExecute - item relative url: ", relUrl);
 
-        await this._dataService?.graphLib?.getHistory(relUrl, item.getValueByName("ID") as number, sitRelativeeUrl);
-        await Dialog.alert(`${this.properties.sampleTextOne}`).catch(() => {
-          /* handle error */
-        });
+        //await this._dataService?.graphLib?.getHistory(relUrl, item.getValueByName("ID") as number, sitRelativeUrl);
+        const versions: any = await this._dataService?.items?.getItemVersions("Documents", item.getValueByName("ID") as number);
+        console.log("onExecute - item versions: ", versions);
+
+        if(versions !== undefined){
+          for (const version of versions) {
+            console.log("onExecute - item version: ", version);
+            const txtVersion: string = JSON.stringify(version, null, 2);
+            await Dialog.alert(`${txtVersion}`).catch(() => {
+              /* handle error */
+            });
+          }
+        }
+        
         break;
       }
       default: {

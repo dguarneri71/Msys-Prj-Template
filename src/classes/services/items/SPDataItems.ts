@@ -4,6 +4,7 @@ import { ISPItem } from "../../dto/ISPItem";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
+import { IItemVersions } from "@pnp/sp/items";
 
 const LOG_SOURCE: string = 'SPDataItems';
 export class SPDataItems extends SPDataBase {
@@ -21,6 +22,12 @@ export class SPDataItems extends SPDataBase {
         }
 
         return items;
+    }
+
+    public async getItemVersions(listName: string, Id: number): Promise<IItemVersions> {
+        const itemVersions: IItemVersions = await this._sp.web.lists.getByTitle(listName).items.getById(Id).select("*", "Author/ID", "Author/Title").expand("Author").versions();
+        console.log("getItemVersions: ", itemVersions);
+        return itemVersions;
     }
 
     /*
