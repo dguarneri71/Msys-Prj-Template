@@ -1,0 +1,18 @@
+{
+    "out": "docs",
+    "entryPoints": [
+        "./src",
+        "./src/classes/*/*.ts",
+        "./src/classes/*/*/*.ts",
+        "./src/webparts/webPartTemplate/*.ts",
+        "./src/webparts/webPartTemplate/*/*.ts",
+        "./src/webparts/webPartTemplate/*/*.tsx"
+    ],
+    "exclude": [
+        "**/loc/**",
+        "**/node_modules/**"
+    ],
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "excludeExternals": true
+}

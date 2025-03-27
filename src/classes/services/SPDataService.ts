@@ -3,10 +3,25 @@ import { PageContext } from "@microsoft/sp-page-context";
 import { AadHttpClientFactory, AadTokenProviderFactory, HttpClient } from "@microsoft/sp-http";
 import { spfi, SPFI, SPFx as spSPFx } from "@pnp/sp";
 import { graphfi, GraphFI, SPFx as gSPFx } from "@pnp/graph";
+/**
+ * @import IDataService
+ */
 import { IDataService } from "./IDataService";
+/** 
+ * @import SPDataLists
+ */
 import { SPDataLists } from "./lists/SPDataLists";
+/**
+ * @import SPDataItems
+ */
 import { SPDataItems } from "./items/SPDataItems";
+/**
+ * @import SPDataFiles
+ */
 import { SPDataFiles } from "./files/SPDataFiles";
+/**
+ * @import SPDataGraph
+ */
 import { SPDataGraph } from "./graphLib/SPDataGraph";
 
 const LOG_SOURCE: string = 'SPDataService';

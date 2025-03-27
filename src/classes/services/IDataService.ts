@@ -1,6 +1,18 @@
+/** 
+ * @import SPDataItems
+ */
 import { SPDataItems } from "./items/SPDataItems";
+/** 
+ * @import SPDataFiles
+ */
 import { SPDataFiles } from "./files/SPDataFiles";
+/** 
+ * @import SPDataLists
+ */
 import { SPDataLists } from "./lists/SPDataLists";
+/** 
+ * @import SPDataGraph
+ */
 import { SPDataGraph } from "./graphLib/SPDataGraph";
 
 //Interfaccia utilizzata per le classi che lavorano con i dati

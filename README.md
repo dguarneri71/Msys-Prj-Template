@@ -72,15 +72,9 @@ Install:
 - [Build your first Field Customizer extension](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-field-customizer)
 - [JSDoc](https://jsdoc.app/)
 
-## JSDoc
+## TypeDoc
 
-npm install --save-dev jsdoc
-npm install --save-dev gulp-jsdoc3
-npm install --save-dev jsdoc-plugin-typescript-new
-
-npm uninstall jsdoc-plugin-typescript
-
- //"excludePattern": "(^|\\/|\\\\)_"
+npm install --save-dev typedoc@0.23
 
 ## Command
 
@@ -96,4 +90,4 @@ gulp serve --config=history
 
 gulp clean; gulp bundle --ship; gulp package-solution --ship
 
-.\node_modules\.bin\jsdoc.cmd -c jsdoc.conf.json
+npx typedoc --options typedoc.json

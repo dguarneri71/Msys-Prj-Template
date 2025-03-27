@@ -1,5 +1,9 @@
+/**
+ * @interface
+ * Tipo persona
+ */
 export interface IPerson {
-    Id: number;
+    Name: string;
     Title: string;
 }
 
