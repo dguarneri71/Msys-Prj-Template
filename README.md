@@ -76,6 +76,8 @@ Install:
 
 npm install --save-dev typedoc@0.23
 
+provare: [typedoc-plugin-markdown](https://typedoc-plugin-markdown.org/docs/quick-start)
+
 ## Command
 
 yo @microsoft/sharepoint
