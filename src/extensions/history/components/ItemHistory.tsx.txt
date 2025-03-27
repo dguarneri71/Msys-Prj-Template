@@ -1,0 +1,99 @@
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog';
+
+import { find } from "lodash";
+import {
+    PrimaryButton,
+    Button,
+    DialogFooter,
+    DialogContent
+} from '@fluentui/react';
+
+
+import {
+    DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, Selection,
+    ColumnActionsMode
+} from "@fluentui/react/lib/DetailsList";
+
+import { parse, format } from "date-fns";
+
+import { IField } from "@pnp/sp/fields/types";
+import "@pnp/sp/fields";
+import SPDataService from '../../../classes/services/SPDataService';
+
+interface IItemHistoryDialogContentProps {
+    versions: Array<any>;
+    columns: Array<string>;
+    columnDefs: Array<IField>;
+    close: () => void;
+}
+
+class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContentProps, {}> {}
+
+export default class ItemHistoryDialog extends BaseDialog {
+    public itemId: number = 0;
+    public listId: string = "";
+    public viewId: string = "";
+    public fieldInterntalNames: Array<string> = [];
+    public fieldDefinitions: Array<IField> = [];
+    public versionHistory: Array<any> = [];
+    public spDataService?: SPDataService;
+    public onBeforeOpen(): Promise<void> {
+        // set up pnp here
+        // let viewId = this.context.pageContext.legacyPageContext.viewId //get the view id and then used pnp to query view columns/fields as follows,
+        let batch = this.spDataService?._sp.createBatch();
+        // get the fields in the view
+        sp.web.lists.getById(this.listId).views.getById(this.viewId).fields.inBatch(batch).get().then((results: any) => {
+
+            this.fieldInterntalNames = results.Items.map(f => {
+                switch (f) {
+                    case "LinkTitle":
+                    case "LinkTitleNoMenu":
+                        return "Title";
+                    //break;
+                    default:
+                        return f;
+                }
+            });
+
+        }).catch((err: any) => {
+            debugger;
+        });
+        // get the field definitions for the list
+        sp.web.lists.getById(this.listId).fields.inBatch(batch).get().then((results: any) => {
+
+            this.fieldDefinitions = results;
+        }).catch((err: any) => {
+            debugger;
+        });
+        // get the field versionHostory
+        sp.web.lists.getById(this.listId).items.getById(this.itemId).versions.inBatch(batch).get().then((versions) => {
+            this.versionHistory = versions;
+
+            return;
+        }).catch((err: any) => {
+            debugger;
+        });
+        return batch.execute().then(e => {
+
+        });
+
+    }
+
+    public render(): void {
+
+        ReactDOM.render(<ItemHistoryDialogContent
+            versions={this.versionHistory}
+            columns={this.fieldInterntalNames}
+            columnDefs={this.fieldDefinitions}
+            close={this.close}
+        />, this.domElement);
+    }
+
+    public getConfig(): IDialogConfiguration {
+        return {
+            isBlocking: false
+        };
+    }
+}

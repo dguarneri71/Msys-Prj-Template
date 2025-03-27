@@ -1,0 +1,17 @@
+{
+  "source": {
+    "include": ["src"],
+    "exclude": ["node_modules"],
+    "includePattern": ".+\\.(ts|tsx)$",
+    "excludePattern": "(^|\\/|\\\\)(_|loc)(\\/|\\\\|$)"
+  },
+  "plugins": ["jsdoc-plugin-typescript-new"],
+  "typescript": {
+    "moduleRoot": "src"
+  },
+  "opts": {
+    "destination": "./docs",
+    "encoding": "utf8",
+    "recurse": true
+  }
+}

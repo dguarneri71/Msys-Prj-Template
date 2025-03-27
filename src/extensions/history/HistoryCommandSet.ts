@@ -11,8 +11,11 @@ import { IDataService } from '../../classes/services/IDataService';
 import SPDataService from '../../classes/services/SPDataService';
 import "@pnp/sp/items";
 import '@pnp/sp/items';
+import { IItemVersion } from '@pnp/sp/items';
 
 /**
+ * Guarda questo esempio
+ * https://github.com/pnp/sp-dev-fx-webparts/blob/main/samples/react-item-History
  * If your command set uses the ClientSideComponentProperties JSON input,
  * it will be deserialized into the BaseExtension.properties object.
  * You can define an interface to describe it.
@@ -52,17 +55,15 @@ export default class HistoryCommandSet extends BaseListViewCommandSet<IHistoryCo
         console.log("onExecute - item id: ", item.getValueByName("ID"));
         console.log("onExecute - item FileRef: ", decodeURI(item.getValueByName("FileRef")));
         console.log("onExecute - item FileLeafRef: ", item.getValueByName("FileLeafRef"));
-        
-        const FileLeafRef: string = item.getValueByName("FileLeafRef");
-        const DocLibUrl: string = decodeURI(item.getValueByName("FileRef"));
-        const relUrl: string = DocLibUrl.replace("/" + FileLeafRef, "").replace("https://"+ this._dataService?.graphLib?.sharepointHostName, "");
-        console.log("onExecute - item relative url: ", relUrl);
 
-        //await this._dataService?.graphLib?.getHistory(relUrl, item.getValueByName("ID") as number, sitRelativeUrl);
-        const versions: any = await this._dataService?.items?.getItemVersions("Documents", item.getValueByName("ID") as number);
+        const listId: string = this.context.pageContext.list?.id.toString() || "";
+        console.log("onExecute - listTitle: ", listId);
+        const itemId: number = item.getValueByName("ID") as number;
+
+        const versions: IItemVersion[] | undefined = await this._dataService?.items?.getItemVersions(listId, itemId);
         console.log("onExecute - item versions: ", versions);
 
-        if(versions !== undefined){
+        if (versions !== undefined) {
           for (const version of versions) {
             console.log("onExecute - item version: ", version);
             const txtVersion: string = JSON.stringify(version, null, 2);
@@ -71,7 +72,7 @@ export default class HistoryCommandSet extends BaseListViewCommandSet<IHistoryCo
             });
           }
         }
-        
+
         break;
       }
       default: {

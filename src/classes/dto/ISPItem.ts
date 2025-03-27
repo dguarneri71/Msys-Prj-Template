@@ -1,7 +1,8 @@
 export interface IPerson {
-    Name: string;
+    Id: number;
     Title: string;
 }
+
 export interface ISPItem {
     Id: number;
     Title?: string;

@@ -70,10 +70,23 @@ Install:
 - [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
 - [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 
 - [Build your first Field Customizer extension](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-field-customizer)
+- [JSDoc](https://jsdoc.app/)
+
+## JSDoc
+
+npm install --save-dev jsdoc
+npm install --save-dev gulp-jsdoc3
+npm install --save-dev jsdoc-plugin-typescript-new
+
+npm uninstall jsdoc-plugin-typescript
+
+ //"excludePattern": "(^|\\/|\\\\)_"
 
 ## Command
 
 yo @microsoft/sharepoint
+
+gulp serve //nobrowser
 
 gulp serve --config=csTemplate
 
@@ -82,3 +95,5 @@ gulp serve --config=fieldTemplate
 gulp serve --config=history
 
 gulp clean; gulp bundle --ship; gulp package-solution --ship
+
+.\node_modules\.bin\jsdoc.cmd -c jsdoc.conf.json
