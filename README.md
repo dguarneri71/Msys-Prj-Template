@@ -27,6 +27,8 @@ Node 18.20.4
 
 Install:
 
+npm install gulp-cli yo @microsoft/generator-sharepoint@1.19.0 --global
+
 1. [PnP/PnPjs](https://pnp.github.io/pnpjs/) v. - npm install @pnp/sp @pnp/graph --save
 2. [@pnp/spfx-property-controls](https://pnp.github.io/sp-dev-fx-property-controls/) v.3 - npm install @pnp/spfx-property-controls --save --save-exact
 3. [@pnp/spfx-controls-react](https://pnp.github.io/sp-dev-fx-controls-react/) v.3 - npm install @pnp/spfx-controls-react --save --save-exact
@@ -68,17 +70,17 @@ Install:
 - [Building for Microsoft teams](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview)
 - [Use Microsoft Graph in your solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis)
 - [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
-- [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 
+- [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365
 - [Build your first Field Customizer extension](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-field-customizer)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
-- [Typescript Playground](https://www.typescriptlang.org/play/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) - Manuale ufficiale Typescript
+- [Typescript Playground](https://www.typescriptlang.org/play/) - Sito per giocare con Typescript
 - [JSDoc](https://jsdoc.app/)
 
 ## TypeDoc
 
 npm install --save-dev typedoc@0.23
 
-provare: [typedoc-plugin-markdown](https://typedoc-plugin-markdown.org/docs/quick-start)
+todo provare: [typedoc-plugin-markdown](https://typedoc-plugin-markdown.org/docs/quick-start)
 
 ## Command
 
