@@ -29,7 +29,7 @@ Install:
 
 npm install gulp-cli yo @microsoft/generator-sharepoint@1.19.0 --global
 
-1. [PnP/PnPjs](https://pnp.github.io/pnpjs/) v. - npm install @pnp/sp @pnp/graph --save
+1. [PnP/PnPjs](https://pnp.github.io/pnpjs/) v.4 - npm install @pnp/sp @pnp/graph --save
 2. [@pnp/spfx-property-controls](https://pnp.github.io/sp-dev-fx-property-controls/) v.3 - npm install @pnp/spfx-property-controls --save --save-exact
 3. [@pnp/spfx-controls-react](https://pnp.github.io/sp-dev-fx-controls-react/) v.3 - npm install @pnp/spfx-controls-react --save --save-exact
 
