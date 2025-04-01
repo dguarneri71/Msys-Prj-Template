@@ -7,14 +7,8 @@ import { IDataService } from '../../../classes/services/IDataService';
 import { IWebPartTemplateState } from './IWebPartTemplateState';
 import { CommandBar, ICommandBarItemProps, IconButton, IIconProps } from '@fluentui/react';
 import { Dialog } from '@microsoft/sp-dialog';
-import { TSPTaskItem } from '../../../classes/dto/TSPTaskItem';
 import { formatDate } from '../../../classes/helpers/DateHelper';
-import { TSPItem } from '../../../classes/dto/TSPItem';
-import { ITaskItem } from '../../../classes/dto/ITaskItem';
-import { FactorySPItem } from '../../../classes/helpers/FactorySPItem';
-import { TaskItem } from '../../../classes/dto/TaskItem';
-import { ISPItem } from '../../../classes/dto/ISPItem';
-import { SPItem } from '../../../classes/dto/SPItem';
+import { ITask } from "../../../classes/types";
 
 const deleteIcon: IIconProps = { iconName: 'Delete' };
 const editIcon: IIconProps = { iconName: 'Edit' };
@@ -34,14 +28,14 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       maxWidth: 20
     },
     {
-      name: "ProjectName",
+      name: "projectName",
       displayName: "Project Name",
       maxWidth: 100
     },
     {
       name: "Modified",
       maxWidth: 150,
-      render: (rowitem: TSPTaskItem) => {
+      render: (rowitem: ITask) => {
         const value = formatDate(rowitem.Modified, "it-IT", true);
         return <span>{value}</span>;
       }
@@ -50,7 +44,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       name: "",
       sorting: false,
       maxWidth: 40,
-      render: (rowitem: TSPTaskItem) => {
+      render: (rowitem: ITask) => {
         const buttons = <div>
           <IconButton iconProps={deleteIcon} onClick={async () => { await this._onDelete(rowitem) }} title="Delete" ariaLabel="delete" />
           <IconButton iconProps={editIcon} onClick={async () => { await this._onEdit(rowitem) }} title="Edit" ariaLabel="edit" />
@@ -135,19 +129,24 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   }
 
   private _onLoadItems(): void {
-    try {
-      this.spService?.items?.getItems<TSPTaskItem>(this.props.listName).then((items: TSPTaskItem[]) => {
-        console.log("_onLoadItems - Items count: ", items.length);
-        this.setState({
-          items: items
-        });
-      }).catch(reason => {
-        console.log("_onLoadItems - error: ", reason);
+    //Non posso usare il coalesce nel mapping per come dichiarato, ci vuole il cadt esplicito
+    this.spService?.items?.getListItems<ITask>({
+      listTitle: "Tasks",
+      select: ["Id", "Title", "ProjectName", "Modified"], // Controllo tipi su queste chiavi
+      mapper: (item) => ({
+        Id: item.Id as number,
+        Title: item.Title as string, // Cast esplicito (senza any)
+        projectName: item.ProjectName ? item.ProjectName as string : "",
+        Modified: item.Modified ? new Date(item.Modified as string) : undefined,
+      })
+    }).then((items: ITask[]) => {
+      console.log("_onLoadItems - Items count: ", items.length);
+      this.setState({
+        items: items
       });
-    }
-    catch (error: unknown) {
-      console.log("_onLoadItems - error: ", error);
-    }
+    }).catch(reason => {
+      console.log("_onLoadItems - error: ", reason);
+    });
   }
 
   private _onCreate(): void {
@@ -156,7 +155,15 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       Title: "TEST New - " + date.toDateString(),
       ProjectName: "TEST DG aggiunta"
     }
-    this.spService?.items?.addItem<TSPTaskItem>(this.props.listName, data).then((item: TSPTaskItem) => {
+    this.spService?.items?.addItem<ITask>({listTitle: this.props.listName, data: data,
+      mapper: (item) => ({
+        Id: item.Id as number,
+        Title: item.Title as string, // Cast esplicito (senza any)
+        projectName: item.ProjectName ? item.ProjectName as string : "",
+        Modified: item.Modified ? new Date(item.Modified as string) : undefined,
+      })
+    }).then((item: ITask) => {
+      console.log("_onCreate - added item: ", item);
       this._onLoadItems();
     }).catch(reason => {
       console.log("_onCreate - error: ", reason);
@@ -164,7 +171,8 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   }
 
   private _onGetItems(): void {
-    this.spService?.items?.getItems<TSPItem>(this.props.listName).then(async (items) => {
+    this._onLoadItems(); //TODO fare esempio con un altro tipo di item
+    /*this.spService?.items?.getItems<TSPItem>(this.props.listName).then(async (items) => {
       let message: string = "Nessun items caricato";
       if (items && items.length > 0) {
         const item: TSPItem = items[0]
@@ -192,16 +200,17 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     }).catch((reason: unknown) => {
       console.log("_onGetItems - error type: ", typeof reason);
     });
+    */
   }
 
-  private _getSelection(items: TSPTaskItem[]): void {
+  private _getSelection(items: ITask[]): void {
     console.log('_getSelection - Selected items:', items);
   }
 
-  private async _onDelete(item: TSPTaskItem): Promise<void> {
+  private async _onDelete(item: ITask): Promise<void> {
     console.log('_onDelete - Selected item for delete:', item);
     try {
-      await this.spService?.items?.deleteItem(this.props.listName, item);
+      await this.spService?.items?.deleteItem(this.props.listName, item.Id);
       this._onLoadItems();
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -213,25 +222,27 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     }
   }
 
-  private async _onEdit(item: TSPTaskItem): Promise<void> {
+  private async _onEdit(item: ITask): Promise<void> {
     console.log('_onEdit - Selected item for edit:', item);
     const data = {
       Title: "TEST Modifica",
       ProjectName: "TEST DG modifica"
     }
     try {
-      await this.spService?.items?.updateItem(this.props.listName, item, data);
+      //Manca il mappe ma è solo per fare una prova
+      const updatedItem = await this.spService?.items?.updateItem<ITask>({listTitle: this.props.listName, id: item.Id, data: data});
+      console.log('_onEdit - Updated item:', updatedItem);
       this._onLoadItems();
     } catch (error: unknown) {
       console.log("_onEdit - error: ", error);
     }
   }
 
-  private async _onView(item: TSPTaskItem): Promise<void> {
+  private async _onView(item: ITask): Promise<void> {
     console.log('Selected item for edit:', item);
     try {
-      const task = await this.spService?.items?.getItem<TSPTaskItem>(this.props.listName, item);
-      console.log("_onView - project name: ", task?.ProjectName); //Proprietà di ITaskItem
+      const task = await this.spService?.items?.getItem<ITask>({listTitle: this.props.listName, id: item.Id});
+      console.log("_onView - project name: ", task?.projectName); //Proprietà di ITaskItem
       console.log("_onView - modified: ", task?.Modified); //Proprietà di ISPItem
     } catch (error: unknown) {
       console.log("_onView - error: ", error);

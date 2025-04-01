@@ -1,18 +1,14 @@
 {
     "out": "docs",
     "entryPoints": [
-        "./src",
-        "./src/classes/*/*.ts",
-        "./src/classes/*/*/*.ts",
-        "./src/webparts/webPartTemplate/*.ts",
-        "./src/webparts/webPartTemplate/*/*.ts",
-        "./src/webparts/webPartTemplate/*/*.tsx"
+        "./src"
     ],
     "exclude": [
         "**/loc/**",
         "**/node_modules/**"
     ],
-    "excludePrivate": true,
-    "excludeProtected": true,
-    "excludeExternals": true
+    "tsconfig": "./tsconfig.json",
+    "excludePrivate": false,
+    "excludeProtected": false,
+    "excludeExternals": false
 }

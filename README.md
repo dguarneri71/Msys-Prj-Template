@@ -96,4 +96,11 @@ gulp serve --config=history
 
 gulp clean; gulp bundle --ship; gulp package-solution --ship
 
-npx typedoc --options typedoc.json
+npx typedoc --options typedoc.json --entryPointStrategy expand ./src
+
+da mettere in tipedoc.json
+"./src/classes/*/*.ts",
+        "./src/classes/*/*/*.ts",
+        "./src/webparts/webPartTemplate/*.ts",
+        "./src/webparts/webPartTemplate/*/*.ts",
+        "./src/webparts/webPartTemplate/*/*.tsx"

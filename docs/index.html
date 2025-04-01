@@ -50,8 +50,9 @@ Node 18.20.4</p>
   <h2>Prerequisites</h2>
 </a>
 <p>Install:</p>
+<p>npm install gulp-cli yo @microsoft/<a href="mailto:generator-sharepoint@1.19.0">generator-sharepoint@1.19.0</a> --global</p>
 <ol>
-<li><a href="https://pnp.github.io/pnpjs/">PnP/PnPjs</a> v. - npm install @pnp/sp @pnp/graph --save</li>
+<li><a href="https://pnp.github.io/pnpjs/">PnP/PnPjs</a> v.4 - npm install @pnp/sp @pnp/graph --save</li>
 <li><a href="https://pnp.github.io/sp-dev-fx-property-controls/">@pnp/spfx-property-controls</a> v.3 - npm install @pnp/spfx-property-controls --save --save-exact</li>
 <li><a href="https://pnp.github.io/sp-dev-fx-controls-react/">@pnp/spfx-controls-react</a> v.3 - npm install @pnp/spfx-controls-react --save --save-exact</li>
 </ol>
@@ -125,8 +126,10 @@ Node 18.20.4</p>
 <li><a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview">Building for Microsoft teams</a></li>
 <li><a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis">Use Microsoft Graph in your solution</a></li>
 <li><a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview">Publish SharePoint Framework applications to the Marketplace</a></li>
-<li><a href="https://aka.ms/m365pnp">Microsoft 365 Patterns and Practices</a> - Guidance, tooling, samples and open-source controls for your Microsoft 365 </li>
+<li><a href="https://aka.ms/m365pnp">Microsoft 365 Patterns and Practices</a> - Guidance, tooling, samples and open-source controls for your Microsoft 365</li>
 <li><a href="https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-field-customizer">Build your first Field Customizer extension</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/intro.html">TypeScript Handbook</a> - Manuale ufficiale Typescript</li>
+<li><a href="https://www.typescriptlang.org/play/">Typescript Playground</a> - Sito per giocare con Typescript</li>
 <li><a href="https://jsdoc.app/">JSDoc</a></li>
 </ul>
 
@@ -134,6 +137,7 @@ Node 18.20.4</p>
   <h2>TypeDoc</h2>
 </a>
 <p>npm install --save-dev <a href="mailto:typedoc@0.23">typedoc@0.23</a></p>
+<p>todo provare: <a href="https://typedoc-plugin-markdown.org/docs/quick-start">typedoc-plugin-markdown</a></p>
 
 <a href="#command" id="command" style="color: inherit; text-decoration: none;">
   <h2>Command</h2>
@@ -145,6 +149,12 @@ Node 18.20.4</p>
 <p>gulp serve --config=history</p>
 <p>gulp clean; gulp bundle --ship; gulp package-solution --ship</p>
 <p>npx typedoc --options typedoc.json</p>
+<p>da mettere in tipedoc.json
+&quot;./src/classes/<em>/</em>.ts&quot;,
+        &quot;./src/classes/<em>/</em>/<em>.ts&quot;,
+        &quot;./src/webparts/webPartTemplate/</em>.ts&quot;,
+        &quot;./src/webparts/webPartTemplate/<em>/</em>.ts&quot;,
+        &quot;./src/webparts/webPartTemplate/<em>/</em>.tsx&quot;</p>
 </div></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
@@ -154,7 +164,10 @@ Node 18.20.4</p>
 <div class="tsd-filter-visibility">
 <h4 class="uppercase">Member Visibility</h4><form>
 <ul id="tsd-filter-options">
-<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li></ul></form></div>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-private" name="private"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Private</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></form></div>
 <div class="tsd-theme-toggle">
 <h4 class="uppercase">Theme</h4><select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
 <nav class="tsd-navigation primary">
@@ -179,13 +192,20 @@ Node 18.20.4</p>
 <li class="tsd-kind-module"><a href="modules/classes_services_graphLib_SPDataGraph.html">classes/services/graph<wbr/>Lib/SPData<wbr/>Graph</a></li>
 <li class="tsd-kind-module"><a href="modules/classes_services_items_SPDataItems.html">classes/services/items/SPData<wbr/>Items</a></li>
 <li class="tsd-kind-module"><a href="modules/classes_services_lists_SPDataLists.html">classes/services/lists/SPData<wbr/>Lists</a></li>
+<li class="tsd-kind-module"><a href="modules/classes_types.html">classes/types</a></li>
+<li class="tsd-kind-module"><a href="modules/classes_types_SPBaseTypes.html">classes/types/SPBase<wbr/>Types</a></li>
+<li class="tsd-kind-module"><a href="modules/classes_types_SPTypes.html">classes/types/SPTypes</a></li>
+<li class="tsd-kind-module"><a href="modules/extensions_csTemplate_CsTemplateCommandSet.html">extensions/cs<wbr/>Template/<wbr/>Cs<wbr/>Template<wbr/>Command<wbr/>Set</a></li>
+<li class="tsd-kind-module"><a href="modules/extensions_fieldTemplate_FieldTemplateFieldCustomizer.html">extensions/field<wbr/>Template/<wbr/>Field<wbr/>Template<wbr/>Field<wbr/>Customizer</a></li>
+<li class="tsd-kind-module"><a href="modules/extensions_fieldTemplate_components_FieldTemplate.html">extensions/field<wbr/>Template/components/<wbr/>Field<wbr/>Template</a></li>
+<li class="tsd-kind-module"><a href="modules/extensions_fieldTemplate_components_FieldTemplate_module_scss.html">extensions/field<wbr/>Template/components/<wbr/>Field<wbr/>Template.module.scss</a></li>
+<li class="tsd-kind-module"><a href="modules/extensions_history_HistoryCommandSet.html">extensions/history/<wbr/>History<wbr/>Command<wbr/>Set</a></li>
 <li class="tsd-kind-module"><a href="modules/index.html">index</a></li>
 <li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_WebPartTemplateWebPart.html">webparts/web<wbr/>Part<wbr/>Template/<wbr/>Web<wbr/>Part<wbr/>Template<wbr/>Web<wbr/>Part</a></li>
 <li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_components_IWebPartTemplateProps.html">webparts/web<wbr/>Part<wbr/>Template/components/IWeb<wbr/>Part<wbr/>Template<wbr/>Props</a></li>
 <li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_components_IWebPartTemplateState.html">webparts/web<wbr/>Part<wbr/>Template/components/IWeb<wbr/>Part<wbr/>Template<wbr/>State</a></li>
 <li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_components_WebPartTemplate.html">webparts/web<wbr/>Part<wbr/>Template/components/<wbr/>Web<wbr/>Part<wbr/>Template</a></li>
-<li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_components_WebPartTemplate_module_scss.html">webparts/web<wbr/>Part<wbr/>Template/components/<wbr/>Web<wbr/>Part<wbr/>Template.module.scss</a></li>
-<li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_loc_mystrings.html">webparts/web<wbr/>Part<wbr/>Template/loc/mystrings</a></li></ul></li></ul></div></details></nav></div></div>
+<li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_components_WebPartTemplate_module_scss.html">webparts/web<wbr/>Part<wbr/>Template/components/<wbr/>Web<wbr/>Part<wbr/>Template.module.scss</a></li></ul></li></ul></div></details></nav></div></div>
 <div class="container tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div><script src="assets/main.js"></script></body></html>
