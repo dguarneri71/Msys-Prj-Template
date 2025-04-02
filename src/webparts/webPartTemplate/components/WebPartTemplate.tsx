@@ -8,7 +8,8 @@ import { IWebPartTemplateState } from './IWebPartTemplateState';
 import { CommandBar, ICommandBarItemProps, IconButton, IIconProps } from '@fluentui/react';
 import { Dialog } from '@microsoft/sp-dialog';
 import { formatDate } from '../../../classes/helpers/DateHelper';
-import { ITask } from "../../../classes/types";
+import { ISPItem, ITask } from "../../../classes/types";
+import { GetListItemsOptions } from 'classes/services/items/SPDataItems';
 
 const deleteIcon: IIconProps = { iconName: 'Delete' };
 const editIcon: IIconProps = { iconName: 'Edit' };
@@ -155,7 +156,8 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
       Title: "TEST New - " + date.toDateString(),
       ProjectName: "TEST DG aggiunta"
     }
-    this.spService?.items?.addItem<ITask>({listTitle: this.props.listName, data: data,
+    this.spService?.items?.addItem<ITask>({
+      listTitle: this.props.listName, data: data,
       mapper: (item) => ({
         Id: item.Id as number,
         Title: item.Title as string, // Cast esplicito (senza any)
@@ -171,27 +173,36 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   }
 
   private _onGetItems(): void {
-    this._onLoadItems(); //TODO fare esempio con un altro tipo di item
-    /*this.spService?.items?.getItems<TSPItem>(this.props.listName).then(async (items) => {
+    const optionsGetTasks: GetListItemsOptions<ITask> = {
+      listTitle: this.props.listName,
+      select: ["Id", "Title", "ProjectName", "Modified"], // Controllo tipi su queste chiavi
+      mapper: (item) => ({
+        Id: item.Id as number,
+        Title: item.Title as string, // Cast esplicito (senza any)
+        projectName: item.ProjectName ? item.ProjectName as string : "",
+        Modified: item.Modified ? new Date(item.Modified as string) : undefined,
+      })
+    };
+    this.spService?.items?.getListItems<ITask>(optionsGetTasks).then(async (items) => {
       let message: string = "Nessun items caricato";
       if (items && items.length > 0) {
-        const item: TSPItem = items[0]
-        message = JSON.stringify(item, null, 2);
+        const task: ITask = items[0]
+        message = JSON.stringify(task, null, 2);
         console.log("_onGetItems - item: ", message);
-        console.log("_onGetItems - property ProjectName value: ", item.ProjectName);
-        console.log("_onGetItems - property DG_NumericTest value: ", item.DG_NumericTest ?? "Valore vuoto")
-        const task: ITaskItem = FactorySPItem.createObject<ITaskItem, TaskItem>(TaskItem, item);
-        console.log("_onGetItems - oggetto task: ", task);
-        console.log("_onGetItems - oggetto task: ", task.ModifiedFormatted);
+        console.log("_onGetItems - task: ", task);
+        console.log("_onGetItems - task: ", task.projectName);
       }
       await Dialog.alert(message);
 
       //Recupero un item da un'altra lista
-      this.spService?.items?.getItems<TSPItem>("Settings").then(async (items) => {
+      const optionsGetSettings: GetListItemsOptions<ISPItem> = {
+        listTitle: "Settings"
+      };
+
+      this.spService?.items?.getListItems<ISPItem>(optionsGetSettings).then(async (items) => {
         if (items && items.length > 0) {
-          const item: TSPItem = items[0]
-          const objSetting: ISPItem = FactorySPItem.createObject<ISPItem, SPItem>(SPItem, item);
-          console.log("_onGetItems - oggetto setting: ", objSetting);
+          const item: ISPItem = items[0];
+          console.log("_onGetItems - oggetto setting: ", item);
         }
       }).catch((reason: unknown) => {
         console.log("_onGetItems - error: ", reason);
@@ -200,7 +211,6 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     }).catch((reason: unknown) => {
       console.log("_onGetItems - error type: ", typeof reason);
     });
-    */
   }
 
   private _getSelection(items: ITask[]): void {
@@ -230,7 +240,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
     }
     try {
       //Manca il mappe ma è solo per fare una prova
-      const updatedItem = await this.spService?.items?.updateItem<ITask>({listTitle: this.props.listName, id: item.Id, data: data});
+      const updatedItem = await this.spService?.items?.updateItem<ITask>({ listTitle: this.props.listName, id: item.Id, data: data });
       console.log('_onEdit - Updated item:', updatedItem);
       this._onLoadItems();
     } catch (error: unknown) {
@@ -241,7 +251,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   private async _onView(item: ITask): Promise<void> {
     console.log('Selected item for edit:', item);
     try {
-      const task = await this.spService?.items?.getItem<ITask>({listTitle: this.props.listName, id: item.Id});
+      const task = await this.spService?.items?.getItem<ITask>({ listTitle: this.props.listName, id: item.Id });
       console.log("_onView - project name: ", task?.projectName); //Proprietà di ITaskItem
       console.log("_onView - modified: ", task?.Modified); //Proprietà di ISPItem
     } catch (error: unknown) {
