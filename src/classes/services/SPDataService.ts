@@ -23,6 +23,7 @@ import { SPDataFiles } from "./files/SPDataFiles";
  * @import SPDataGraph
  */
 import { SPDataGraph } from "./graphLib/SPDataGraph";
+import { SPDataFields } from "./fields/SPDataFields";
 
 const LOG_SOURCE: string = 'SPDataService';
 
@@ -38,6 +39,7 @@ export default class SPDataService implements IDataService {
     private _lists: SPDataLists | undefined = undefined;
     private _items: SPDataItems | undefined = undefined;
     private _files: SPDataFiles | undefined = undefined;
+    private _fields: SPDataFields | undefined = undefined;
     private _graphLib: SPDataGraph | undefined = undefined;
 
     //Costruttore per inizializzare pnp/pnpjs, usa gli scope.
@@ -71,7 +73,7 @@ export default class SPDataService implements IDataService {
      */
     public get lists(): SPDataLists | undefined {
         if (this._lists === undefined && this._sp !== undefined && this._graph !== undefined) {
-            this._lists = new SPDataLists(this._sp, this._graph);
+            this._lists = new SPDataLists(this._sp, this._graph, this);
         }
         return this._lists;
     }
@@ -83,9 +85,21 @@ export default class SPDataService implements IDataService {
      */
     public get items(): SPDataItems | undefined {
         if (this._items === undefined && this._sp !== undefined && this._graph !== undefined) {
-            this._items = new SPDataItems(this._sp, this._graph);
+            this._items = new SPDataItems(this._sp, this._graph, this);
         }
         return this._items;
+    }
+
+    /**
+     * Istanzio classe SPDataFields solo se necessaria - Lazy loading
+     * @this {SPDataService}
+     * @return {SPDataFields | undefined}
+     */
+    public get fields(): SPDataFields | undefined {
+        if (this._fields === undefined && this._sp !== undefined && this._graph !== undefined) {
+            this._fields = new SPDataFields(this._sp, this._graph, this);
+        }
+        return this._fields;
     }
 
     /**
@@ -95,7 +109,7 @@ export default class SPDataService implements IDataService {
      */
     public get files(): SPDataFiles | undefined {
         if (this._files === undefined && this._sp !== undefined && this._graph !== undefined) {
-            this._files = new SPDataFiles(this._sp, this._graph);
+            this._files = new SPDataFiles(this._sp, this._graph, this);
         }
         return this._files;
     }
@@ -108,7 +122,7 @@ export default class SPDataService implements IDataService {
      */
     public get graphLib(): SPDataGraph | undefined {
         if (this._graphLib === undefined && this._sp !== undefined && this._graph !== undefined) {
-            this._graphLib = new SPDataGraph(this._sp, this._graph);
+            this._graphLib = new SPDataGraph(this._sp, this._graph, this);
         }
         return this._graphLib;
     }

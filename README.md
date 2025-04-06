@@ -92,7 +92,10 @@ gulp serve --config=csTemplate
 
 gulp serve --config=fieldTemplate
 
-gulp serve --config=history
+gulp serve --config=history --browser=chrome
+
+[Hisory Url](https://onguarneri.sharepoint.com/sites/CorsoSPFX/Shared%20Documents/Forms/AllItems.aspx?debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fmanifests.js&loadSPFX=true&customActions=%7B%222c3ee25d-b453-430c-b0d4-92df3cbab872%22%3A%7B%22location%22%3A%22ClientSideExtension.ListViewCommandSet.CommandBar%22%2C%22properties%22%3A%7B%22sampleTextOne%22%3A%22One+item+is+selected+in+the+list%22%2C%22sampleTextTwo%22%3A%22This+command+is+always+visible.%22%7D%7D%7D)
+
 
 gulp clean; gulp bundle --ship; gulp package-solution --ship
 

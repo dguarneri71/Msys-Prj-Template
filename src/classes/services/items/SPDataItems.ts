@@ -2,7 +2,8 @@ import { SPDataBase } from "../SPDataBase";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
-import { IItemVersion } from "@pnp/sp/items";
+//import { IItemVersion } from "@pnp/sp/items";
+import { ISPItemVersion } from "classes/types";
 //import { ISPItem } from "../../types";
 
 const LOG_SOURCE: string = 'SPDataItems';
@@ -89,9 +90,11 @@ export class SPDataItems extends SPDataBase {
     }
 
 
-    public async getItemVersions(listId: string, Id: number): Promise<IItemVersion[]> {
-        const itemVersions: IItemVersion[] = await this._sp.web.lists.getById(listId).items.getById(Id).select("*", "Author/ID", "Author/Title").expand("Author").versions();
-        console.log("getItemVersions: ", itemVersions);
+    public async getItemVersions(listId: string, Id: number): Promise<ISPItemVersion[]> {
+        //const viewFields = await this.spDataService.fields?.getViewFieldInternalNames(listId, viewId);
+        //console.log("getItemVersions - fields", viewFields);
+        const itemVersions: ISPItemVersion[] = await this._sp.web.lists.getById(listId).items.getById(Id).select("*", "Author/ID", "Author/Title").expand("Author").versions();
+        console.log("getItemVersions - item versions ", itemVersions);
         return itemVersions;
     }
 
@@ -106,6 +109,7 @@ export class SPDataItems extends SPDataBase {
 
         if (select.length > 0) query.select(...select);
         if (expand.length > 0) query.expand(...expand)
+
 
         const item = await query();
 

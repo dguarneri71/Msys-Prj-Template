@@ -11,3 +11,13 @@ export interface ITask extends ISPItem {
     taskDetails?: string;
     projectName?: string;
 }
+
+export interface ISPField {
+    Title: string;
+    InternalName: string;
+    TypeAsString: string;
+}
+
+export interface ISPItemVersion {
+    [key: string]: unknown;
+}

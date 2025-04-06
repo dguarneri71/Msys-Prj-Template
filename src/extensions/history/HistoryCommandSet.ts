@@ -1,17 +1,19 @@
 import { Log } from '@microsoft/sp-core-library';
 import {
   BaseListViewCommandSet,
-  RowAccessor,
+  //RowAccessor,
   type Command,
   type IListViewCommandSetExecuteEventParameters,
   type ListViewStateChangedEventArgs
 } from '@microsoft/sp-listview-extensibility';
-import { Dialog } from '@microsoft/sp-dialog';
+import ItemHistoryDialog from "./components/ItemHistory";
+//import { Dialog } from '@microsoft/sp-dialog';
 import { IDataService } from '../../classes/services/IDataService';
 import SPDataService from '../../classes/services/SPDataService';
 import "@pnp/sp/items";
 import '@pnp/sp/items';
-import { IItemVersion } from '@pnp/sp/items';
+//import { IItemVersion } from '@pnp/sp/items';
+//import { isInteger } from 'lodash';
 
 /**
  * Guarda questo esempio
@@ -20,11 +22,7 @@ import { IItemVersion } from '@pnp/sp/items';
  * it will be deserialized into the BaseExtension.properties object.
  * You can define an interface to describe it.
  */
-export interface IHistoryCommandSetProperties {
-  // This is an example; replace with your own properties
-  sampleTextOne: string;
-  sampleTextTwo: string;
-}
+export interface IHistoryCommandSetProperties {}
 
 const LOG_SOURCE: string = 'HistoryCommandSet';
 
@@ -35,8 +33,8 @@ export default class HistoryCommandSet extends BaseListViewCommandSet<IHistoryCo
     Log.info(LOG_SOURCE, 'Initialized HistoryCommandSet');
 
     // initial state of the command's visibility
-    const compareOneCommand: Command = this.tryGetCommand('COMMAND_History');
-    compareOneCommand.visible = false;
+    const historyCommand: Command = this.tryGetCommand('COMMAND_History');
+    historyCommand.visible = false;
 
     this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged);
 
@@ -47,32 +45,20 @@ export default class HistoryCommandSet extends BaseListViewCommandSet<IHistoryCo
   }
 
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
-    //const sitRelativeUrl: string = "/sites/CorsoSPFX";
     switch (event.itemId) {
       case 'COMMAND_History': {
-        const item: RowAccessor = event.selectedRows[0];
-        console.log("onExecute - item: ", item);
-        console.log("onExecute - item id: ", item.getValueByName("ID"));
-        console.log("onExecute - item FileRef: ", decodeURI(item.getValueByName("FileRef")));
-        console.log("onExecute - item FileLeafRef: ", item.getValueByName("FileLeafRef"));
-
-        const listId: string = this.context.pageContext.list?.id.toString() || "";
-        console.log("onExecute - listTitle: ", listId);
-        const itemId: number = item.getValueByName("ID") as number;
-
-        const versions: IItemVersion[] | undefined = await this._dataService?.items?.getItemVersions(listId, itemId);
-        console.log("onExecute - item versions: ", versions);
-
-        if (versions !== undefined) {
-          for (const version of versions) {
-            console.log("onExecute - item version: ", version);
-            const txtVersion: string = JSON.stringify(version, null, 2);
-            await Dialog.alert(`${txtVersion}`).catch(() => {
-              /* handle error */
-            });
-          }
-        }
-
+        const dialog: ItemHistoryDialog = new ItemHistoryDialog();
+        dialog.itemId = event.selectedRows[0].getValueByName("ID");
+        dialog.listId = this.context.pageContext.list?.id.toString() || "";
+        dialog.viewId = this.context.pageContext.legacyPageContext.viewId;
+        dialog.spDataService = this._dataService;
+        dialog.show()
+          .then(() => {
+            console.log(LOG_SOURCE + " - show dialog: ");
+          })
+          .catch((e: Error) => {
+            console.log(LOG_SOURCE + " - error: ", e);
+          });
         break;
       }
       default: {
@@ -84,13 +70,11 @@ export default class HistoryCommandSet extends BaseListViewCommandSet<IHistoryCo
   private _onListViewStateChanged = (args: ListViewStateChangedEventArgs): void => {
     Log.info(LOG_SOURCE, 'List view state changed');
 
-    const compareOneCommand: Command = this.tryGetCommand('COMMAND_History');
-    if (compareOneCommand) {
+    const historyCommand: Command = this.tryGetCommand('COMMAND_History');
+    if (historyCommand) {
       // This command should be hidden unless exactly one row is selected.
-      compareOneCommand.visible = this.context.listView.selectedRows?.length === 1;
+      historyCommand.visible = this.context.listView.selectedRows?.length === 1;
     }
-
-    // TODO: Add your logic here
 
     // You should call this.raiseOnChage() to update the command bar
     this.raiseOnChange();
