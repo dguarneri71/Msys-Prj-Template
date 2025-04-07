@@ -36,12 +36,15 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
             const currentVersion = this.props.versions[index];
             const previousVersion = this.props.versions[index - 1];
             const fieldName: string = column.fieldName;
-            find(currentVersion, fieldName)
+            find(currentVersion, fieldName);
+
             switch (columnType) {
                 case "User":
-                    /*if (currentVersion[fieldName]["LookupId"] !== previousVersion[fieldName]["LookupId"]) {
+                    const item: PersonField = currentVersion[fieldName] as PersonField;
+                    const prevItem: PersonField = previousVersion[fieldName] as PersonField;
+                    if (item.LookupId !== prevItem.LookupId) {
                         return true;
-                    }*/
+                    }
                     return false;
                 case "LookupMulti":
                     /*
@@ -74,69 +77,94 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return {};
     }
 
-    public onRenderDateTime(item?: any, index?: number, column?: IColumn): any {
-        if (column?.fieldName === undefined) {
-            return <></>;
+    public onRenderDateTime(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
+        let result = <></>;
+
+        if (column?.fieldName !== undefined) {
+            if (item !== undefined && column.fieldName in item) {
+                const dateTxt: string = formatDate(item[column.fieldName] as Date);
+                result = (<div style={this.getStyle(item, index, column)}>{dateTxt}</div>);
+            }
         }
-        const dateTxt: string = formatDate(item[column.fieldName]);
-        return (<div style={this.getStyle(item, index, column)}>{dateTxt}</div>);
+
+        return result;
     }
 
-    public onRenderUser(item?: any, index?: number, column?: IColumn): any {
+    public onRenderUser(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
+        let result: JSX.Element = <></>;
         if (column?.fieldName === undefined) {
-            return <></>;
+            return result;
         }
-        if (item[column.fieldName] !== undefined || item[column.fieldName] !== null) {
-            const userItem: PersonField | undefined = item[column.fieldName];
-            if (userItem && userItem.LookupValue) {
-                return (<div style={this.getStyle(item, index, column, "User")}>
-                    {userItem.LookupValue}
+
+        if (item !== undefined && column.fieldName in item) {
+            if (item[column.fieldName] !== undefined || item[column.fieldName] !== null) {
+                const userItem: PersonField = item[column.fieldName] as PersonField;
+                if (userItem && userItem.LookupValue) {
+                    result = (<div style={this.getStyle(item, index, column, "User")}>
+                        {userItem.LookupValue}
+                    </div>);
+                }
+            }
+        }
+        return result;
+    }
+
+    public onRenderLookupMulti(item?: any, index?: number, column?: IColumn): JSX.Element {
+        let display = "";
+        let result = <></>;
+
+        if (column?.fieldName !== undefined) {
+            for (const val of item[column.fieldName]) {
+                display += val.LookupValue + ";";
+            }
+
+            result = (<div style={this.getStyle(item, index, column, "LookupMulti")} >
+                {display}
+            </div>);
+        }
+
+        return result;
+    }
+
+    public onRenderChoice(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
+        let result = <></>;
+        if (column?.fieldName !== undefined) {
+            if (item !== undefined && column.fieldName in item) {
+                result = (<div style={this.getStyle(item, index, column)}>
+                    {item[column.fieldName]}
                 </div>);
             }
         }
+        return result;
     }
 
-    public onRenderLookupMulti(item?: any, index?: number, column?: IColumn): any {
-        let display = "";
-        if (column?.fieldName === undefined) {
-            return <></>;
+    public onRenderText(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
+        let result = <></>;
+
+        if (column?.fieldName !== undefined) {
+            //Controllo se una proprietà essite nell'interfaccia
+            if (item !== undefined && column.fieldName in item) {
+                result = (<div style={this.getStyle(item, index, column)}>{item[column.fieldName]}</div>);
+            }
         }
 
-        for (const val of item[column.fieldName]) {
-            display += val.LookupValue + ";";
-        }
-        return (<div style={this.getStyle(item, index, column, "LookupMulti")}>
-            {display}
-        </div>);
+        return result;
     }
 
-    public onRenderChoice(item?: any, index?: number, column?: IColumn): any {
-        if (column?.fieldName === undefined) {
-            return <></>;
+    public onRenderAttachments(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
+        let result = <></>;
+
+        if (column?.fieldName !== undefined) {
+            //Controllo se una proprietà essite nell'interfaccia
+            if (item !== undefined && column.fieldName in item) {
+                const value = item[column.fieldName] ? "Yes" : "No";
+                result = (<div style={this.getStyle(item, index, column)}>
+                    {value}
+                </div>);
+            }
         }
 
-        return (<div style={this.getStyle(item, index, column)}>
-            {item[column.fieldName]}
-        </div>);
-    }
-
-    public onRenderText(item?: any, index?: number, column?: IColumn): any {
-        if (column?.fieldName === undefined) {
-            return <></>;
-        }
-        return (<div style={this.getStyle(item, index, column)}>
-            {item[column.fieldName]}
-        </div>);
-    }
-
-    public onRenderAttachments(item?: any, index?: number, column?: IColumn): any {
-        if (column?.fieldName === undefined) {
-            return <></>;
-        }
-        const value = item[column.fieldName] ? "Yes" : "No";
-        return (<div style={this.getStyle(item, index, column)}>
-            {value}
-        </div>);
+        return result;
     }
 
     public render(): JSX.Element {
