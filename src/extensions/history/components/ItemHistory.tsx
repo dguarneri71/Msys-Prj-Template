@@ -8,19 +8,13 @@ import {
     DialogContent
 } from '@fluentui/react';
 import {
-    DetailsList, DetailsListLayoutMode, IColumn, SelectionMode,
-    //Selection,
-    //ColumnActionsMode
+    DetailsList, DetailsListLayoutMode, IColumn, SelectionMode
 } from "@fluentui/react/lib/DetailsList";
 
-//import { parse, format } from "date-fns";
-
-//import { IField } from "@pnp/sp/fields/types";
 import "@pnp/sp/fields";
-//import SPDataService from '../../../classes/services/SPDataService';
 import { IDataService } from 'classes/services/IDataService';
-//import { IItemVersion } from '@pnp/sp/items';
-import { ISPField, ISPItemVersion } from 'classes/types';
+import { ISPField, ISPItemVersion, PersonField } from 'classes/types';
+import { formatDate } from '../../../classes/helpers/DateHelper';
 
 interface IItemHistoryDialogContentProps {
     versions: Array<ISPItemVersion> | undefined;
@@ -80,6 +74,52 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return {};
     }
 
+    public onRenderDateTime(item?: any, index?: number, column?: IColumn): any {
+        if (column?.fieldName === undefined) {
+            return <></>;
+        }
+        const dateTxt: string = formatDate(item[column.fieldName]);
+        return (<div style={this.getStyle(item, index, column)}>{dateTxt}</div>);
+    }
+
+    public onRenderUser(item?: any, index?: number, column?: IColumn): any {
+        if (column?.fieldName === undefined) {
+            return <></>;
+        }
+        if (item[column.fieldName] !== undefined || item[column.fieldName] !== null) {
+            const userItem: PersonField | undefined = item[column.fieldName];
+            if (userItem && userItem.LookupValue) {
+                return (<div style={this.getStyle(item, index, column, "User")}>
+                    {userItem.LookupValue}
+                </div>);
+            }
+        }
+    }
+
+    public onRenderLookupMulti(item?: any, index?: number, column?: IColumn): any {
+        let display = "";
+        if (column?.fieldName === undefined) {
+            return <></>;
+        }
+
+        for (const val of item[column.fieldName]) {
+            display += val.LookupValue + ";";
+        }
+        return (<div style={this.getStyle(item, index, column, "LookupMulti")}>
+            {display}
+        </div>);
+    }
+
+    public onRenderChoice(item?: any, index?: number, column?: IColumn): any {
+        if (column?.fieldName === undefined) {
+            return <></>;
+        }
+
+        return (<div style={this.getStyle(item, index, column)}>
+            {item[column.fieldName]}
+        </div>);
+    }
+
     public onRenderText(item?: any, index?: number, column?: IColumn): any {
         if (column?.fieldName === undefined) {
             return <></>;
@@ -104,85 +144,82 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
             const _items = this.props.versions === undefined ? [] : this.props.versions;
             const _columns = this.props.columns === undefined ? [] : this.props.columns;
 
-            let testviewFields: Array<IColumn | undefined> = _columns.map(cname => {
-                //if (cname !== "DocIcon") {
-                    let columnDef: ISPField | undefined = find(this.props.columnDefs, (colunmDef) => { return colunmDef.InternalName === cname; });
-                    if (columnDef !== undefined) {
-                        switch (columnDef["TypeAsString"]) {
-                            case "Attachments":
-                                return {
-                                    name: columnDef["Title"],
-                                    isResizable: true,
-                                    key: cname,
-                                    fieldName: cname,
-                                    minWidth: 100,
-                                    onRender: this.onRenderAttachments.bind(this)
-                                };
-                            case "LookupMulti":
-                                return {
-                                    name: columnDef["Title"],
-                                    isResizable: true,
-                                    key: cname,
-                                    fieldName: cname,
-                                    minWidth: 100,
-                                    //onRender: this.onRenderLookupMulti.bind(this)
-                                };
+            const testviewFields: Array<IColumn | undefined> = _columns.map(cname => {
+                const columnDef: ISPField | undefined = find(this.props.columnDefs, (colunmDef) => { return colunmDef.InternalName === cname; });
+                if (columnDef !== undefined) {
+                    switch (columnDef.TypeAsString) {
+                        case "Attachments":
+                            return {
+                                name: columnDef.Title,
+                                isResizable: true,
+                                key: cname,
+                                fieldName: cname,
+                                minWidth: 100,
+                                onRender: this.onRenderAttachments.bind(this)
+                            };
+                        case "LookupMulti":
+                            return {
+                                name: columnDef.Title,
+                                isResizable: true,
+                                key: cname,
+                                fieldName: cname,
+                                minWidth: 100,
+                                onRender: this.onRenderLookupMulti.bind(this)
+                            };
 
-                            case "DateTime":
-                                return {
-                                    name: columnDef["Title"],
-                                    isResizable: true,
-                                    key: cname,
-                                    fieldName: cname,
-                                    minWidth: 100,
-                                    //onRender: this.onRenderDateTime.bind(this)
-                                };
-                            case "Choice":
-                                return {
-                                    name: columnDef["Title"],
-                                    isResizable: true,
-                                    key: cname,
-                                    fieldName: cname,
-                                    minWidth: 100,
-                                    //onRender: this.onRenderChoice.bind(this)
-                                };
-                            case "Lookup":
-                            case "User":
-                                return {
-                                    name: columnDef["Title"],
-                                    isResizable: true,
-                                    key: cname,
-                                    fieldName: cname,
-                                    minWidth: 100,
-                                    //onRender: this.onRenderUser.bind(this)
-                                };
+                        case "DateTime":
+                            return {
+                                name: columnDef.Title,
+                                isResizable: true,
+                                key: cname,
+                                fieldName: cname,
+                                minWidth: 100,
+                                onRender: this.onRenderDateTime.bind(this)
+                            };
+                        case "Choice":
+                            return {
+                                name: columnDef.Title,
+                                isResizable: true,
+                                key: cname,
+                                fieldName: cname,
+                                minWidth: 100,
+                                onRender: this.onRenderChoice.bind(this)
+                            };
+                        case "Lookup":
+                        case "User":
+                            return {
+                                name: columnDef.Title,
+                                isResizable: true,
+                                key: cname,
+                                fieldName: cname,
+                                minWidth: 100,
+                                onRender: this.onRenderUser.bind(this)
+                            };
 
-                            case "Text":
-                            case "Note":
-                                return {
-                                    name: columnDef["Title"],
-                                    isResizable: true,
-                                    key: cname,
-                                    fieldName: cname,
-                                    minWidth: 100,
-                                    onRender: this.onRenderText.bind(this)
-                                };
-                            default:
-                                console.log("the colum type " + columnDef["TypeAsString"] + " HAS NOT BEENTESTED, default to text")
-                                return {
-                                    name: columnDef["Title"],
-                                    isResizable: true,
-                                    key: cname,
-                                    fieldName: cname,
-                                    minWidth: 100,
-                                    onRender: this.onRenderText.bind(this)
-                                };
-                        }
-                    } else {
-                        return;
+                        case "Text":
+                        case "Note":
+                            return {
+                                name: columnDef.Title,
+                                isResizable: true,
+                                key: cname,
+                                fieldName: cname,
+                                minWidth: 100,
+                                onRender: this.onRenderText.bind(this)
+                            };
+                        default:
+                            console.log("the colum type " + columnDef.TypeAsString + " HAS NOT BEENTESTED, default to text")
+                            return {
+                                name: columnDef.Title,
+                                isResizable: true,
+                                key: cname,
+                                fieldName: cname,
+                                minWidth: 100,
+                                onRender: this.onRenderText.bind(this)
+                            };
                     }
-                //}
-                //return;
+                } else {
+                    return;
+                }
             });
 
             console.log("Render() - testviewFields: ", testviewFields);

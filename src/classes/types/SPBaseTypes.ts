@@ -2,9 +2,11 @@
  * Tipo per colonne Person/Group (expandibili)
  */
 export type PersonField = {
-    Id: number;
-    Title: string;
+    Id?: number;
+    Title?: string;
     Email?: string;
+    LookupId?: number;
+    LookupValue?:string;
 };
 
 /**
