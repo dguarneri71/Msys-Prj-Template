@@ -2,9 +2,7 @@ import { SPDataBase } from "../SPDataBase";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
-//import { IItemVersion } from "@pnp/sp/items";
 import { ISPItemVersion } from "classes/types";
-//import { ISPItem } from "../../types";
 
 const LOG_SOURCE: string = 'SPDataItems';
 
@@ -56,6 +54,14 @@ export interface UpdateListItemOptions extends AddListItemOptions {
     id: number;
 }
 
+/** Opzioni per eliminare un elemento di una lista SharePoint. */
+export interface DeleteListItemOptions {
+    /** Nome della lista SharePoint */
+    listTitle: string;
+    /** ID dell'item della lista SharePoint */
+    id: number;
+}
+
 /**
  * @class 
  * Classe che contiene i metodi per lavorare con gli item di una lista SharePoint
@@ -89,7 +95,12 @@ export class SPDataItems extends SPDataBase {
         }
     }
 
-
+    /**
+     * Recupera tutte le versioni di un item / folder da una lista
+     * @param listId ID della lista 
+     * @param Id ID dell'item
+     * @returns {ISPItemVersion[]} array di versioni dell'item
+     */
     public async getItemVersions(listId: string, Id: number): Promise<ISPItemVersion[]> {
         //const viewFields = await this.spDataService.fields?.getViewFieldInternalNames(listId, viewId);
         //console.log("getItemVersions - fields", viewFields);
@@ -99,7 +110,7 @@ export class SPDataItems extends SPDataBase {
     }
 
     /**
-     * 
+     * Recupera un elemento da una lista SharePoint
      * @param {GetListItemOptions} options Opzioni per recuperare un item.
      * @returns 
      */
@@ -109,7 +120,6 @@ export class SPDataItems extends SPDataBase {
 
         if (select.length > 0) query.select(...select);
         if (expand.length > 0) query.expand(...expand)
-
 
         const item = await query();
 
@@ -140,18 +150,16 @@ export class SPDataItems extends SPDataBase {
         return mapper(_item) as T;
     }
 
-    //Metodo per cancellare un item
-    public async deleteItem(listName: string, id: number): Promise<void> {
-        console.log(LOG_SOURCE + " - deleteItem() - from list '" + listName + "' - ID: '" + id + "' ");
-
-        //Demo errore
-        if (id % 2 === 0) {
-            throw new Error("Non puoi cancellare gli elementi pari");
-        }
+    /**
+     * Metodo per cancellare un item
+     * @param listName Il title della lista
+     * @param id 
+     */
+    public async deleteItem(options: DeleteListItemOptions): Promise<void> {
+        console.log(LOG_SOURCE + " - deleteItem() - from list '" + options.listTitle + "' - ID: '" + options.id + "' ");
 
         try {
-            const query = this._sp.web.lists.getByTitle(listName).items.getById(id);
-            await query.delete();
+            await this._sp.web.lists.getByTitle(options.listTitle).items.getById(options.id).delete();
             console.log(LOG_SOURCE + " - deleteItem() - item deleted.");
         }
         catch (error: unknown) {

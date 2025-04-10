@@ -1,12 +1,23 @@
 /**
- * Tipo per colonne Person/Group (expandibili)
+ * Tipo per colonne Person/Group esteso, va rimappato
+ * @type
  */
 export type PersonField = {
-    Id?: number;
+    /**
+     * @field corrisponde a LookupId
+     */
+    Id: number;
+    /**
+     * @field corrisponde a LookupValue
+     */
     Title?: string;
     Email?: string;
 };
 
+/**
+ * Tipo per colonne Person/Group standard
+ * @type
+ */
 export type PersonFieldLookup = {
     LookupId?: number;
     LookupValue?:string;
@@ -14,23 +25,32 @@ export type PersonFieldLookup = {
 };
 
 /**
- * Tipo per colonne Lookup
+ * Tipo per colonne Lookupcon campi rinominati
+ * @type
  */
 export type ExtendedLookupField = {
+    /**
+     * @field corrisponde a LookupId
+     */
     Id: number;
+    /**
+     * @field corrisponde a LookupValue
+     */
     Title?: string;
 };
 
+/**
+ * Classico campo lookup
+ * @type
+ */
 export type LookupField = {
     LookupId: number;
     LookupValue?:string;
 };
 
-// Utility per convertire Date da stringa
-//export type DateString = string; // SharePoint restituisce date come stringhe
-
 /**
  * Tipo base per gli elementi SharePoint (opzionale, ma utile per estendere)
+ * @interface
  */
 export interface ISPItem {
     Id: number;

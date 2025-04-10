@@ -220,7 +220,7 @@ export default class WebPartTemplate extends React.Component<IWebPartTemplatePro
   private async _onDelete(item: ITask): Promise<void> {
     console.log('_onDelete - Selected item for delete:', item);
     try {
-      await this.spService?.items?.deleteItem(this.props.listName, item.Id);
+      await this.spService?.items?.deleteItem({listTitle: this.props.listName, id: item.Id});
       this._onLoadItems();
     } catch (error: unknown) {
       if (error instanceof Error) {
