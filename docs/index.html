@@ -146,15 +146,16 @@ Node 18.20.4</p>
 <p>gulp serve //nobrowser</p>
 <p>gulp serve --config=csTemplate</p>
 <p>gulp serve --config=fieldTemplate</p>
-<p>gulp serve --config=history</p>
+<p>gulp serve --config=history --browser=chrome</p>
+<p><a href="https://onguarneri.sharepoint.com/sites/CorsoSPFX/Shared%20Documents/Forms/AllItems.aspx?debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fmanifests.js&loadSPFX=true&customActions=%7B%222c3ee25d-b453-430c-b0d4-92df3cbab872%22%3A%7B%22location%22%3A%22ClientSideExtension.ListViewCommandSet.CommandBar%22%2C%22properties%22%3A%7B%22sampleTextOne%22%3A%22One+item+is+selected+in+the+list%22%2C%22sampleTextTwo%22%3A%22This+command+is+always+visible.%22%7D%7D%7D">Hisory Url</a></p>
 <p>gulp clean; gulp bundle --ship; gulp package-solution --ship</p>
-<p>npx typedoc --options typedoc.json</p>
-<p>da mettere in tipedoc.json
+<p>npx typedoc --options typedoc.json --entryPointStrategy expand ./src</p>
+<p>da mettere in tipedoc.json in entryPoints se necessario
 &quot;./src/classes/<em>/</em>.ts&quot;,
-        &quot;./src/classes/<em>/</em>/<em>.ts&quot;,
-        &quot;./src/webparts/webPartTemplate/</em>.ts&quot;,
-        &quot;./src/webparts/webPartTemplate/<em>/</em>.ts&quot;,
-        &quot;./src/webparts/webPartTemplate/<em>/</em>.tsx&quot;</p>
+&quot;./src/classes/<em>/</em>/<em>.ts&quot;,
+&quot;./src/webparts/webPartTemplate/</em>.ts&quot;,
+&quot;./src/webparts/webPartTemplate/<em>/</em>.ts&quot;,
+&quot;./src/webparts/webPartTemplate/<em>/</em>.tsx&quot;</p>
 </div></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
@@ -186,8 +187,9 @@ Node 18.20.4</p>
 <li class="tsd-kind-module"><a href="modules/classes_helpers_DateHelper.html">classes/helpers/<wbr/>Date<wbr/>Helper</a></li>
 <li class="tsd-kind-module"><a href="modules/classes_helpers_FactorySPItem.html">classes/helpers/<wbr/>FactorySPItem</a></li>
 <li class="tsd-kind-module"><a href="modules/classes_services_IDataService.html">classes/services/IData<wbr/>Service</a></li>
-<li class="tsd-kind-module"><a href="modules/classes_services_SPDataBase.html">classes/services/SPData<wbr/>Base</a></li>
+<li class="tsd-kind-module"><a href="modules/classes_services_SPBaseData.html">classes/services/SPBase<wbr/>Data</a></li>
 <li class="tsd-kind-module"><a href="modules/classes_services_SPDataService.html">classes/services/SPData<wbr/>Service</a></li>
+<li class="tsd-kind-module"><a href="modules/classes_services_fields_SPDataFields.html">classes/services/fields/SPData<wbr/>Fields</a></li>
 <li class="tsd-kind-module"><a href="modules/classes_services_files_SPDataFiles.html">classes/services/files/SPData<wbr/>Files</a></li>
 <li class="tsd-kind-module"><a href="modules/classes_services_graphLib_SPDataGraph.html">classes/services/graph<wbr/>Lib/SPData<wbr/>Graph</a></li>
 <li class="tsd-kind-module"><a href="modules/classes_services_items_SPDataItems.html">classes/services/items/SPData<wbr/>Items</a></li>
@@ -200,6 +202,7 @@ Node 18.20.4</p>
 <li class="tsd-kind-module"><a href="modules/extensions_fieldTemplate_components_FieldTemplate.html">extensions/field<wbr/>Template/components/<wbr/>Field<wbr/>Template</a></li>
 <li class="tsd-kind-module"><a href="modules/extensions_fieldTemplate_components_FieldTemplate_module_scss.html">extensions/field<wbr/>Template/components/<wbr/>Field<wbr/>Template.module.scss</a></li>
 <li class="tsd-kind-module"><a href="modules/extensions_history_HistoryCommandSet.html">extensions/history/<wbr/>History<wbr/>Command<wbr/>Set</a></li>
+<li class="tsd-kind-module"><a href="modules/extensions_history_components_ItemHistory.html">extensions/history/components/<wbr/>Item<wbr/>History</a></li>
 <li class="tsd-kind-module"><a href="modules/index.html">index</a></li>
 <li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_WebPartTemplateWebPart.html">webparts/web<wbr/>Part<wbr/>Template/<wbr/>Web<wbr/>Part<wbr/>Template<wbr/>Web<wbr/>Part</a></li>
 <li class="tsd-kind-module"><a href="modules/webparts_webPartTemplate_components_IWebPartTemplateProps.html">webparts/web<wbr/>Part<wbr/>Template/components/IWeb<wbr/>Part<wbr/>Template<wbr/>Props</a></li>

@@ -2,6 +2,12 @@ import { formatDate } from "../helpers/DateHelper";
 import { ITaskItem } from "./ITaskItem";
 import { SPItem } from "./SPItem";
 
+/**
+ * Classe che implementa un elemento della lista Task del siti di prova.
+ * Solo di esempio
+ * @class
+ * @deprecated
+ */
 export class TaskItem extends SPItem implements ITaskItem {
     ProjectName?: string;
     StarDate?: Date;

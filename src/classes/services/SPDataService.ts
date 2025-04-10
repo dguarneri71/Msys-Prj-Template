@@ -23,6 +23,9 @@ import { SPDataFiles } from "./files/SPDataFiles";
  * @import SPDataGraph
  */
 import { SPDataGraph } from "./graphLib/SPDataGraph";
+/**
+ * @import SPDataFields
+ */
 import { SPDataFields } from "./fields/SPDataFields";
 
 const LOG_SOURCE: string = 'SPDataService';

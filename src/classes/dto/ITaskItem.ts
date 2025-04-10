@@ -1,4 +1,8 @@
-//Interfaccia che rappresenta un item della lista Task
+/**
+ * Interfaccia che rappresenta un item della lista Task
+ * @interface
+ * @deprecated
+ */
 export interface ITaskItem {
     ProjectName?: string;
     StarDate?: Date;

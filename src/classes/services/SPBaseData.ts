@@ -5,7 +5,7 @@ import { IDataService } from "./IDataService";
 /*
 Classe base per inizializzare PnP/PnPjs
 */
-export class SPDataBase {
+export class SPBaseData {
     public sharepointHostName: string = "onguarneri.sharepoint.com";
     protected _sp: SPFI;
     protected _graph: GraphFI;

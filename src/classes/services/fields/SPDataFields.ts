@@ -1,4 +1,4 @@
-import { SPDataBase } from "../SPDataBase";
+import { SPBaseData as SPBaseData } from "../SPBaseData";
 import { ISPField } from "classes/types";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
@@ -11,7 +11,7 @@ interface IViewFields {
     Items: Array<string>;
 }
 
-export class SPDataFields extends SPDataBase {
+export class SPDataFields extends SPBaseData {
     /**
      * Metodo per recuperare i field di una lista
      * @param listId ID della lista da cui recuperare i field

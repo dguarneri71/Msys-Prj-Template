@@ -1,11 +1,11 @@
-import { SPDataBase } from "../SPDataBase";
+import { SPBaseData } from "../SPBaseData";
 import "@pnp/graph/sites";
 import "@pnp/graph/lists";
 //import "@pnp/graph/list-items";
 
 const LOG_SOURCE: string = 'SPDataGraph';
 
-export class SPDataGraph extends SPDataBase {
+export class SPDataGraph extends SPBaseData {
 
     public async getHistory(listRelUrl: string, itemId: number, serverRelativeUrl: string = "/sites/CorsoSPFX"): Promise<unknown> {
         console.log(LOG_SOURCE + " - getHistory - start on list: ", listRelUrl);

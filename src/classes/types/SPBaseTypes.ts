@@ -49,7 +49,17 @@ export type LookupField = {
 };
 
 /**
- * Tipo base per gli elementi SharePoint (opzionale, ma utile per estendere)
+ * Interfaccia generica per un item SharePoint, legge tutte le proprietà.
+ * [key]: string
+ * [value]: number | string | Date | unknown
+ * @interface
+ */
+export interface ISPGenericItem {
+    [property: string]: number | string | Date | unknown;
+ }
+
+/**
+ * Tipo base per gli elementi SharePoint (opzionale, ma utile da estendere)
  * @interface
  */
 export interface ISPItem {

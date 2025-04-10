@@ -1,4 +1,4 @@
-import { SPDataBase } from "../SPDataBase";
+import { SPBaseData } from "../SPBaseData";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
@@ -65,9 +65,9 @@ export interface DeleteListItemOptions {
 /**
  * @class 
  * Classe che contiene i metodi per lavorare con gli item di una lista SharePoint
- * @extends {SPDataBase}
+ * @extends {SPBaseData}
  */
-export class SPDataItems extends SPDataBase {
+export class SPDataItems extends SPBaseData {
     /**
     * Recupera elementi da una lista SharePoint con tipizzazione dinamica.
     * @template T - Tipo di ritorno dopo il mapping.

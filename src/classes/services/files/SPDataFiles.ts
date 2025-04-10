@@ -1,6 +1,6 @@
 
-import { SPDataBase } from "../SPDataBase";
+import { SPBaseData } from "../SPBaseData";
 
-export class SPDataFiles extends SPDataBase {
+export class SPDataFiles extends SPBaseData {
     
 }
