@@ -76,7 +76,7 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
                     console.log("fieldChanged - lkpItem: ", currentLkpItems);
                     prevLkpItems = previousVersion[fieldName] as LookupField[];
                     console.log("fieldChanged - currentLkpItem: ", prevLkpItems);
-                    
+
                     if (currentLkpItems.length !== prevLkpItems.length) {
                         return true;
                     }
@@ -337,8 +337,10 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
 
             console.log("Render() - testviewFields: ", testviewFields);
 
+            //Rimuove tutte gli undefined
             const cleanArray = testviewFields.filter((item): item is IColumn => item !== undefined);
 
+            //Aggiunge un nuovo elemento (colonna)
             cleanArray.unshift({
                 name: "Version",
                 isResizable: true,
@@ -350,7 +352,7 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
             console.log("Render() - cleanArray: ", cleanArray);
 
             return (<DialogContent
-                title='Version History(Grid)'
+                title='Version History (Grid)'
                 onDismiss={this.props.close}
                 showCloseButton={true}>
                 <DetailsList
@@ -370,7 +372,11 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         }
         catch (error: unknown) {
             console.log("Dialog Content Error: ", error);
-            return <></>
+            let msg: string = "";
+            if (error instanceof Error) {
+                msg = "Error: " + error.message;
+            }
+            return <div>{msg}</div>
         }
     }
 }

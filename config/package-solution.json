@@ -1,14 +1,14 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "msys-prj-template-client-side-solution",
+    "name": "MSYS PRJ Template",
     "id": "0ca594b5-5cdd-48e8-842e-ab12d7a7acc3",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "developer": {
-      "name": "",
+      "name": "Daniele Guarneri",
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",
@@ -16,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "msys-prj-template description"
+        "default": "MSYS PRJ Template"
       },
       "longDescription": {
-        "default": "msys-prj-template description"
+        "default": "MSYS PRJ Template. Collection of example code for inspiration"
       },
       "screenshotPaths": [],
       "videoUrl": "",
