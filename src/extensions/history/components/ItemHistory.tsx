@@ -10,11 +10,10 @@ import {
 import {
     DetailsList, DetailsListLayoutMode, IColumn, SelectionMode
 } from "@fluentui/react/lib/DetailsList";
-
-import "@pnp/sp/fields";
 import { IDataService } from 'classes/services/IDataService';
-import { ISPField, ISPItemVersion, PersonField } from 'classes/types';
+import { ISPField, ISPItemVersion, LookupField } from 'classes/types';
 import { formatDate } from '../../../classes/helpers/DateHelper';
+import "@pnp/sp/fields";
 
 interface IItemHistoryDialogContentProps {
     versions: Array<ISPItemVersion> | undefined;
@@ -23,7 +22,14 @@ interface IItemHistoryDialogContentProps {
     close: () => void;
 }
 
+/**
+ * @class Classe che implementa il contenuto della dialog custom
+ */
 class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContentProps, {}> {
+    /**
+     * @constructor
+     * @param props 
+     */
     constructor(props: IItemHistoryDialogContentProps) {
         super(props);
 
@@ -31,32 +37,55 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         this.fieldChanged = this.fieldChanged.bind(this);
     }
 
-    public fieldChanged(item?: any, index?: number, column?: IColumn, columnType: string = "Text"): boolean {
+    /**
+     * Verifica se sono cambiati dei valori rispetto alla versione precedente
+     * @param item 
+     * @param index 
+     * @param column 
+     * @param columnType 
+     * @returns 
+     */
+    public fieldChanged(item?: ISPItemVersion, index?: number, column?: IColumn, columnType: string = "Text"): boolean {
+        console.log("fieldChanged - item: ", item);
         if (this.props.versions !== undefined && index && column !== undefined && column.fieldName !== undefined && index < this.props.versions.length - 1) {
             const currentVersion = this.props.versions[index];
+            console.log("fieldChanged - currentVersion: ", currentVersion);
             const previousVersion = this.props.versions[index - 1];
+            console.log("fieldChanged - previousVersion: ", previousVersion);
             const fieldName: string = column.fieldName;
-            find(currentVersion, fieldName);
+            console.log("fieldChanged - fieldName: ", fieldName);
+
+            //const itemFound = find(currentVersion, fieldName);
+            //console.log("fieldChanged - item found: ", itemFound);
+
+            let userItem: LookupField;
+            let prevUserItem: LookupField;
+            let currentLkpItems: LookupField[];
+            let prevLkpItems: LookupField[];
 
             switch (columnType) {
-                case "User":
-                    const item: PersonField = currentVersion[fieldName] as PersonField;
-                    const prevItem: PersonField = previousVersion[fieldName] as PersonField;
-                    if (item.LookupId !== prevItem.LookupId) {
+                case "User": //fa anceh Lookup
+                    userItem = currentVersion[fieldName] as LookupField;
+                    prevUserItem = previousVersion[fieldName] as LookupField;
+                    if (userItem?.LookupId !== prevUserItem?.LookupId) {
                         return true;
                     }
                     return false;
                 case "LookupMulti":
-                    /*
-                    if (this.props.versions[index][column.fieldName].length !== this.props.versions[index + 1][column.fieldName].length) {
+                    currentLkpItems = currentVersion[fieldName] as LookupField[];
+                    console.log("fieldChanged - lkpItem: ", currentLkpItems);
+                    prevLkpItems = previousVersion[fieldName] as LookupField[];
+                    console.log("fieldChanged - currentLkpItem: ", prevLkpItems);
+                    
+                    if (currentLkpItems.length !== prevLkpItems.length) {
                         return true;
                     }
                     // length is the same, compare values
-                    for (let i = 0; i < this.props.versions[index][column.fieldName].length; i++) {
-                        if (this.props.versions[index][column.fieldName][i]["LookupId"] !== this.props.versions[index + 1][column.fieldName][i]["LookupId"]) {
+                    for (let i = 0; i < currentLkpItems.length; i++) {
+                        if (currentLkpItems[i].LookupId !== prevLkpItems[i].LookupId) {
                             return true;
                         }
-                    }*/
+                    }
                     return false;
                 default:
                     if (currentVersion[fieldName] !== previousVersion[fieldName]) {
@@ -68,7 +97,15 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return false;
     }
 
-    public getStyle(item?: any, index?: number, column?: IColumn, columnType: string = "Text"): React.CSSProperties {
+    /**
+     * Evidenzia i valori cambiati di una colonna
+     * @param item
+     * @param index 
+     * @param column 
+     * @param columnType 
+     * @returns 
+     */
+    public getStyle(item?: ISPItemVersion, index?: number, column?: IColumn, columnType: string = "Text"): React.CSSProperties {
         if (this.fieldChanged(item, index, column, columnType)) {
             return {
                 backgroundColor: 'yellow',
@@ -77,6 +114,13 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return {};
     }
 
+    /**
+     * 
+     * @param item 
+     * @param index 
+     * @param column 
+     * @returns 
+     */
     public onRenderDateTime(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
         let result = <></>;
 
@@ -90,6 +134,13 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return result;
     }
 
+    /**
+     * 
+     * @param item 
+     * @param index 
+     * @param column 
+     * @returns 
+     */
     public onRenderUser(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
         let result: JSX.Element = <></>;
         if (column?.fieldName === undefined) {
@@ -98,7 +149,7 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
 
         if (item !== undefined && column.fieldName in item) {
             if (item[column.fieldName] !== undefined || item[column.fieldName] !== null) {
-                const userItem: PersonField = item[column.fieldName] as PersonField;
+                const userItem: LookupField = item[column.fieldName] as LookupField;
                 if (userItem && userItem.LookupValue) {
                     result = (<div style={this.getStyle(item, index, column, "User")}>
                         {userItem.LookupValue}
@@ -109,23 +160,41 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return result;
     }
 
-    public onRenderLookupMulti(item?: any, index?: number, column?: IColumn): JSX.Element {
+    /**
+     * 
+     * @param item 
+     * @param index 
+     * @param column 
+     * @returns 
+     */
+    public onRenderLookupMulti(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
         let display = "";
         let result = <></>;
 
-        if (column?.fieldName !== undefined) {
-            for (const val of item[column.fieldName]) {
-                display += val.LookupValue + ";";
-            }
+        if (item !== undefined && column?.fieldName !== undefined) {
+            if (item[column.fieldName] !== undefined || item[column.fieldName] !== null) {
+                const multiLookUpItems: LookupField[] = item[column.fieldName] as LookupField[];
+                console.log("onRenderLookupMulti: ", multiLookUpItems)
+                for (const val of multiLookUpItems) {
+                    display += val.LookupValue + ";";
+                }
 
-            result = (<div style={this.getStyle(item, index, column, "LookupMulti")} >
-                {display}
-            </div>);
+                result = (<div style={this.getStyle(item, index, column, "LookupMulti")} >
+                    {display}
+                </div>);
+            }
         }
 
         return result;
     }
 
+    /**
+     * 
+     * @param item 
+     * @param index 
+     * @param column 
+     * @returns 
+     */
     public onRenderChoice(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
         let result = <></>;
         if (column?.fieldName !== undefined) {
@@ -138,6 +207,13 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return result;
     }
 
+    /**
+     * 
+     * @param item 
+     * @param index 
+     * @param column 
+     * @returns 
+     */
     public onRenderText(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
         let result = <></>;
 
@@ -151,6 +227,13 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return result;
     }
 
+    /**
+     * 
+     * @param item 
+     * @param index 
+     * @param column 
+     * @returns 
+     */
     public onRenderAttachments(item?: ISPItemVersion, index?: number, column?: IColumn): JSX.Element {
         let result = <></>;
 
@@ -167,6 +250,10 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
         return result;
     }
 
+    /**
+     * Renderizza il contenuto della dialog.
+     * @returns 
+     */
     public render(): JSX.Element {
         try {
             const _items = this.props.versions === undefined ? [] : this.props.versions;
@@ -194,7 +281,6 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
                                 minWidth: 100,
                                 onRender: this.onRenderLookupMulti.bind(this)
                             };
-
                         case "DateTime":
                             return {
                                 name: columnDef.Title,
@@ -223,7 +309,6 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
                                 minWidth: 100,
                                 onRender: this.onRenderUser.bind(this)
                             };
-
                         case "Text":
                         case "Note":
                             return {
@@ -290,6 +375,9 @@ class ItemHistoryDialogContent extends React.Component<IItemHistoryDialogContent
     }
 }
 
+/**
+ * @class Classe che implementa una Dialog custom
+ */
 export default class ItemHistoryDialog extends BaseDialog {
     public itemId: number = 0;
     public listId: string = "";
@@ -300,6 +388,9 @@ export default class ItemHistoryDialog extends BaseDialog {
     public versionHistory: Array<ISPItemVersion> | undefined = [];
     public spDataService?: IDataService | undefined;
 
+    /**
+     * Metodo esecuito prima dell'apertura della dialog che carica i dati inereti alla versione dell'item
+     */
     public async onBeforeOpen(): Promise<void> {
         try {
             // get the fields in the view
@@ -319,6 +410,9 @@ export default class ItemHistoryDialog extends BaseDialog {
         }
     }
 
+    /**
+     * Renderizza la dialog usando il componente ItemHistoryDialogContent
+     */
     public render(): void {
         ReactDOM.render(<ItemHistoryDialogContent
             versions={this.versionHistory}

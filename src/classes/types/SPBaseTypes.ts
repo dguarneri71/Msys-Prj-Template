@@ -5,16 +5,25 @@ export type PersonField = {
     Id?: number;
     Title?: string;
     Email?: string;
+};
+
+export type PersonFieldLookup = {
     LookupId?: number;
     LookupValue?:string;
+    Email?: string;
 };
 
 /**
  * Tipo per colonne Lookup
  */
-export type LookupField = {
+export type ExtendedLookupField = {
     Id: number;
     Title?: string;
+};
+
+export type LookupField = {
+    LookupId: number;
+    LookupValue?:string;
 };
 
 // Utility per convertire Date da stringa
